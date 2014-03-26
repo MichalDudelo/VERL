@@ -1,0 +1,30 @@
+﻿<Window x:Class="Common_Library.ScoreModuleSelectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ScoreModuleSelectWindow" Height="220" Width="300" WindowStyle="None" AllowsTransparency="True" AllowDrop="True" Background="Transparent">
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+            <Style.Setters>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="15"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="Width" Value="120"/>
+                <Setter Property="Height" Value="25"/>
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Border CornerRadius="10" Background="LightSeaGreen" BorderBrush="White" BorderThickness="1">
+            <StackPanel>
+                <ListBox x:Name="ScoreModuleListBox" HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center" Width="270" Height="150" BorderBrush="White"/>
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <Button  Name="okButton" Content="OK"  Style="{StaticResource ButtonStyle }" Click="okButton_Click"/>
+                    <Button  Name="cancelButton" Content="Cancel"  Style="{StaticResource ButtonStyle }" Click="cancelButton_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+        
+            
+    </Grid>
+</Window>

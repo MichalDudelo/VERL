@@ -1,0 +1,75 @@
+﻿<Window x:Class="GamePlay_Preview.ClientsGamePreview"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:GamePlay_Preview"
+        Title="MainWindow" Height="650" Width="650" Icon="Images/SingleRobot.png" ResizeMode="NoResize">
+    
+    <Window.Resources>
+        <Style x:Key="FloorStyle" TargetType="{x:Type StackPanel}">
+
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="/Images/floor.png" Opacity="0.7"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="WallStyle" TargetType="{x:Type StackPanel}">
+
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="/Images/wall.png" Opacity="0.7"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="LabelStyle" TargetType="{x:Type Label}">
+
+            <Style.Setters>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <!--<Setter Property="Margin" Value="10"/>-->
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="Grid.Column" Value="0"/>
+            </Style.Setters>
+            
+        </Style>
+        <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
+
+            <Style.Setters>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="HorizontalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="IsEnabled" Value="False"/>
+                <Setter Property="FontSize" Value="16"/>
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Label Name="scoreLabel" Content="Score: " Style="{StaticResource LabelStyle }"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox Name="scoreTextBox" Width="50" Style="{StaticResource TextBoxStyle }"/>
+            </StackPanel>
+            <Label Name="roundLabel" Content="Round : " Margin="40,0,0,0"  Style="{StaticResource LabelStyle }"/>
+            <TextBox Name="roundTextBox" Width="60" Style="{StaticResource TextBoxStyle }"/>
+        </StackPanel>
+        <!--<Border Grid.Row="1" BorderThickness="2" BorderBrush="Black" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">-->
+        <Grid x:Name="MapGrid"  Grid.Row="1" Height="500" Width="500" Margin="5">
+                    <local:SquareGrid x:Name="squareGrid" SquareSideLength="30">
+                        <local:SquareGrid.Resources>
+                            <Style TargetType="{x:Type StackPanel}" BasedOn="{StaticResource WallStyle}"/>
+                        </local:SquareGrid.Resources>
+                    </local:SquareGrid>
+                </Grid>
+        <!--</Border>-->
+
+    </Grid>
+</Window>

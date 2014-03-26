@@ -1,0 +1,71 @@
+﻿<Window x:Class="GamePlay_Preview.ClientGameStart"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Game Start" Height="200" Width="300" WindowStartupLocation="CenterScreen" KeyDown="OnKeyDownHandler" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True">
+
+    <Window.Resources>
+        <Style x:Key="ButtonStyle" TargetType="{x:Type Button}">
+            <Style.Setters>
+                <Setter Property="Width" Value="120"/>
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="Margin" Value="30"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="BorderBrush" Value="Black"/>
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="LabelStyle" TargetType="{x:Type Label}">
+
+            <Style.Setters>
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+            </Style.Setters>
+        </Style>
+        <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
+
+            <Style.Setters>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Width" Value="120"/>
+                <Setter Property="TextWrapping" Value="Wrap"/>
+            </Style.Setters>
+        </Style>
+    </Window.Resources>
+    <Window.Icon>
+        <ImageSource>Resources/guard64_gold_rest.png</ImageSource>
+    </Window.Icon>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Border Grid.Row="0" Grid.RowSpan="3" Grid.ColumnSpan="2" CornerRadius="20" Background="#FFFFC04C" BorderBrush="White" BorderThickness="1">
+            <StackPanel Margin="10">
+                <Button Content="X" Name="closeButton" FontWeight="ExtraBold" FontSize="10" Foreground="Red"  HorizontalAlignment="Right" Width="30" Height="20"  Click="closeButton_Click"/>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <Label Content="Server IP Address:" Style="{StaticResource LabelStyle}" />
+                    <TextBox Name="serverIPTextBox" Text="localhost" Style="{StaticResource TextBoxStyle}" TextChanged="serverIPTextBox_TextChanged" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Login:" Style="{StaticResource LabelStyle}"/>
+                    <TextBox Name="loginTextBox" Style="{StaticResource TextBoxStyle}" TextChanged="loginTextBox_TextChanged"  Margin="70,0,0,0"/>
+                </StackPanel>
+                <Button Content="Start" x:Name="startClientButton" Style="{StaticResource ButtonStyle}" Click="startClientButton_Click" Margin="79,5"/>
+            </StackPanel>
+        </Border>
+        
+    </Grid>
+</Window>

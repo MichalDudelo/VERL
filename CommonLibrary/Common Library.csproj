@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1465D94B-37E9-427A-A7C1-84771775679F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Common_Library</RootNamespace>
+    <AssemblyName>CommonLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Autofac\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Discovery" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Infrastructure\ActionHistory.cs" />
+    <Compile Include="Infrastructure\CallbackHandler.cs" />
+    <Compile Include="Infrastructure\ClientChannel.cs" />
+    <Compile Include="Infrastructure\GamePlayServerResponse.cs" />
+    <Compile Include="Infrastructure\MoveConsequence.cs" />
+    <Compile Include="Infrastructure\moveType.cs" />
+    <Compile Include="Infrastructure\PossibleAction.cs" />
+    <Compile Include="Infrastructure\ServerResponse.cs" />
+    <Compile Include="Infrastructure\ServerState.cs" />
+    <Compile Include="IService Contracts\IGamePlayService.cs" />
+    <Compile Include="Infrastructure\InitialServerResponse.cs" />
+    <Compile Include="Parts of map\BigItem.cs" />
+    <Compile Include="Parts of map\Directions.cs" />
+    <Compile Include="Parts of map\Floor.cs" />
+    <Compile Include="IService Contracts\IArenaCallback.cs" />
+    <Compile Include="Parts of map\Item.cs" />
+    <Compile Include="Parts of map\Map.cs" />
+    <Compile Include="Parts of map\MapSize.cs" />
+    <Compile Include="Parts of map\Position.cs" />
+    <Compile Include="Parts of map\Robot.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Parts of map\Segment.cs" />
+    <Compile Include="Parts of map\SmallItem.cs" />
+    <Compile Include="Parts of map\Wall.cs" />
+    <Compile Include="Infrastructure\ClientServiceLocator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Autofac\Autofac.dll" />
+    <Content Include="Autofac\Autofac.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
