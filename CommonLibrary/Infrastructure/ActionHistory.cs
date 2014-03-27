@@ -76,12 +76,20 @@ namespace Common_Library.Infrastructure
             this._myCurrentPay = myCurrentPay;
             this._myTotalPay = myTotalPay;
             this._totalPay = totalPay;
+            this._consequence = MoveConsequence.NULL;
+            
+            
         }
         public ActionHistory(string robotLogin,int currentRound, List<PossibleAction> possibleActions)
         {
             this._robotLogin = robotLogin;
             this._currentRound = currentRound;
             this._possibleActions = possibleActions;
+            this._madeMove = MoveType.NULL;
+            this._consequence = MoveConsequence.NULL;
+            this._myCurrentPay = 0;
+            this._myTotalPay = 0;
         }
     }
+
 }

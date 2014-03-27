@@ -21,7 +21,8 @@ namespace Common_Library.Infrastructure
             Burn,
             Disconnect,
             Timeout,
-            DisconnectedPlayer
+            DisconnectedPlayer,
+            NULL
         
     }
 }

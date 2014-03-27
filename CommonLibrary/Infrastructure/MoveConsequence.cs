@@ -23,7 +23,8 @@ namespace Common_Library.Infrastructure
         PickedSmallItem,
         InvalidMove_PickingSmallItem,
         Rest,
-        TimeOut
+        TimeOut,
+        NULL
 
         //strzelilem i zabralem zycie
         //strzelilem w sciane
