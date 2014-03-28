@@ -23,6 +23,7 @@ namespace Arena_Server.Infrastructure
         private int _numberOfSmallItems = 0;
         private MoveConsequence _consequence;
         private double _myPay;
+        private bool _isWallShooted = false;
 
         public double MyPay
         {
@@ -146,7 +147,7 @@ namespace Arena_Server.Infrastructure
         }
 
 
-
+        #region MakeMoveAction
         public Move MakeMoveAction()
         {
 
@@ -159,7 +160,7 @@ namespace Arena_Server.Infrastructure
             switch (DirectionOfMove)
             {
                 case Directions.Up:
-                    if (robot.RobotPosition.Y - 1 > 1)
+                    if (robot.RobotPosition.Y - 1 >= 1)
                     {
                         if (_currentMap.GlobalMap[robot.RobotPosition.Y - 1, robot.RobotPosition.X] is Floor &&
                            !_avatarDictionary.Values.ToList().Exists(r => r.RobotPosition.X == robot.RobotPosition.X && r.RobotPosition.Y == robot.RobotPosition.Y - 1))
@@ -239,7 +240,7 @@ namespace Arena_Server.Infrastructure
                     break;
 
                 case Directions.Left:
-                    if (robot.RobotPosition.X - 1 > 1)
+                    if (robot.RobotPosition.X - 1 >= 1)
                     {
                         if (_currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X - 1] is Floor &&
                             !_avatarDictionary.Values.ToList().Exists(r => r.RobotPosition.X == robot.RobotPosition.X - 1 && r.RobotPosition.Y == robot.RobotPosition.Y))
@@ -277,6 +278,8 @@ namespace Arena_Server.Infrastructure
                 return this;
             }
         }
+        #endregion
+
         public Move PickBigItemAction()
         {
             if (robot.IsHealed == false)
@@ -632,6 +635,12 @@ namespace Arena_Server.Infrastructure
                     {
                         if (robot.RobotPosition.Y - i >= 0)
                         {
+                            if (_currentMap.GlobalMap[robot.RobotPosition.Y - i, robot.RobotPosition.X] is Wall)
+                            {
+                                response = GamePlayServerResponse.OK();
+                                _isWallShooted = true;
+                                break;
+                            }
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y - i);
                             if (hitRobot != null)
                             {
@@ -678,6 +687,12 @@ namespace Arena_Server.Infrastructure
                     {
                         if (robot.RobotPosition.X + i <= _currentMap.MapWidth - 1)
                         {
+                            if (_currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X + i] is Wall)
+                            {
+                                response = GamePlayServerResponse.OK();
+                                _isWallShooted = true;
+                                break;
+                            }
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + i && hr.RobotPosition.Y == robot.RobotPosition.Y);
                             if (hitRobot != null)
                             {
@@ -724,6 +739,12 @@ namespace Arena_Server.Infrastructure
                     {
                         if (robot.RobotPosition.Y + i <= _currentMap.MapHeight - 1)
                         {
+                            if (_currentMap.GlobalMap[robot.RobotPosition.Y + i, robot.RobotPosition.X] is Wall)
+                            {
+                                response = GamePlayServerResponse.OK();
+                                _isWallShooted = true;
+                                break;
+                            }
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y + i);
                             if (hitRobot != null)
                             {
@@ -771,6 +792,12 @@ namespace Arena_Server.Infrastructure
                     {
                         if (robot.RobotPosition.X - i >= 0)
                         {
+                            if (_currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X - i] is Wall)
+                            {
+                                response = GamePlayServerResponse.OK();
+                                _isWallShooted = true;
+                                break;
+                            }
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X - i && hr.RobotPosition.Y == robot.RobotPosition.Y);
                             if (hitRobot != null)
                             {
@@ -822,7 +849,13 @@ namespace Arena_Server.Infrastructure
             }
             else
             {
-                Consequence = MoveConsequence.ShotAndHitPlayer;
+                if (_isWallShooted)
+                {
+                    Consequence = MoveConsequence.ShotAndHitWall;
+                    _isWallShooted = false;
+                }
+                else
+                    Consequence = MoveConsequence.ShotAndHitPlayer;
                 return this;
             }
         }
@@ -867,13 +900,14 @@ namespace Arena_Server.Infrastructure
         {
             var RobotAction = new List<PossibleAction>();
             RobotAvatar hitRobot = null;
+            bool canShoot = false;
             #region BURN
             //if (robot.IsHealed == false)
             //    return new List<PossibleAction>() { new PossibleAction(MoveType.Burn) };
             #endregion
             #region MOVE
             #region MOVE UP
-            if (robot.RobotPosition.Y - 1 > 1)
+            if (robot.RobotPosition.Y - 1 >= 1)
                 if (currentMap.GlobalMap[robot.RobotPosition.Y - 1, robot.RobotPosition.X] is Floor &&
                    !LoggedRobots.Exists(r => r.RobotPosition.X == robot.RobotPosition.X && r.RobotPosition.Y == robot.RobotPosition.Y - 1))
                     RobotAction.Add(new PossibleAction(MoveType.MakeMove, Directions.Up));
@@ -891,7 +925,7 @@ namespace Arena_Server.Infrastructure
                     RobotAction.Add(new PossibleAction(MoveType.MakeMove, Directions.Right));
             #endregion
             #region MOVE LEFT
-            if (robot.RobotPosition.X - 1 > 1)
+            if (robot.RobotPosition.X - 1 >= 1)
                 if (currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X - 1] is Floor &&
                     !LoggedRobots.Exists(r => r.RobotPosition.X == robot.RobotPosition.X - 1 && r.RobotPosition.Y == robot.RobotPosition.Y))
                     RobotAction.Add(new PossibleAction(MoveType.MakeMove, Directions.Left));
@@ -904,7 +938,7 @@ namespace Arena_Server.Infrastructure
                 hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y - 1);
                 if (hitRobot != null)
                     //if (hitRobot.HealthPoints >= 1)
-                        RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Up));
+                    RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Up));
             }
 
             #endregion
@@ -915,7 +949,7 @@ namespace Arena_Server.Infrastructure
                 if (hitRobot != null)
 
                     //if (hitRobot.HealthPoints >= 1)
-                        RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Right));
+                    RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Right));
             }
             #endregion
             #region PUNCH DOWN
@@ -925,7 +959,7 @@ namespace Arena_Server.Infrastructure
                 if (hitRobot != null)
 
                     //if (hitRobot.HealthPoints >= 1)
-                        RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Down));
+                    RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Down));
             }
             #endregion
             #region PUNCH LEFT
@@ -935,7 +969,7 @@ namespace Arena_Server.Infrastructure
                 if (hitRobot != null)
 
                     //if (hitRobot.HealthPoints >= 1)
-                        RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Left));
+                    RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Left));
             }
             #endregion
             #endregion
@@ -943,69 +977,91 @@ namespace Arena_Server.Infrastructure
             #region SHOOT UP
             for (int i = 1; i <= 4; i++)
             {
-                if (robot.RobotPosition.Y - i >= 0 && !(currentMap.GlobalMap[robot.RobotPosition.Y - i, robot.RobotPosition.X] is Wall))
-                    hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y - i);
+                if (robot.RobotPosition.Y - i >= 0)
+                    if (currentMap.GlobalMap[robot.RobotPosition.Y - i, robot.RobotPosition.X] is Wall)
+                    {
+                        RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Up));
+                        break;
+                    }
+                    else
+                    {
+                        hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y - i);
+                        if (hitRobot != null)
+                        {
+                            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Up));
+                            break;
+                        }
+                    }
                 else
                     break;
-                if (hitRobot != null)
-                {
-                    //if (hitRobot.HealthPoints >= 1)
-                    //{
-                    RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Up));
-                    break;
-                }
-                    //}
+
+
             }
             #endregion
             #region SHOOT RIGHT
             for (int i = 1; i <= 4; i++)
             {
-                if (robot.RobotPosition.X + i <= currentMap.MapWidth - 1 && !(currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X + i] is Wall))
-                    hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + i && hr.RobotPosition.Y == robot.RobotPosition.Y);
+                if (robot.RobotPosition.X + i >= currentMap.MapWidth)
+                    if (currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X + i] is Wall)
+                    {
+                        RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Right));
+                        break;
+                    }
+                    else
+                    {
+                        hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + i && hr.RobotPosition.Y == robot.RobotPosition.Y);
+                        if (hitRobot != null)
+                        {
+                            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Right));
+                            break;
+                        }
+                    }
                 else
                     break;
-                if (hitRobot != null)
-                {
-                    //if (hitRobot.HealthPoints >= 1)
-                    //{
-                    RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Right));
-                    break;
-                    //}
-                }
             }
             #endregion
             #region SHOOT DOWN
             for (int i = 1; i <= 4; i++)
             {
-                if (robot.RobotPosition.Y + i <= currentMap.MapHeight - 1 && !(currentMap.GlobalMap[robot.RobotPosition.Y + i, robot.RobotPosition.X] is Wall))
-                    hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y + i);
+                if (robot.RobotPosition.Y + i >= 0)
+                    if (currentMap.GlobalMap[robot.RobotPosition.Y + i, robot.RobotPosition.X] is Wall)
+                    {
+                        RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Down));
+                        break;
+                    }
+                    else
+                    {
+                        hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + i && hr.RobotPosition.Y == robot.RobotPosition.Y);
+                        if (hitRobot != null)
+                        {
+                            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Down));
+                            break;
+                        }
+                    }
                 else
                     break;
-                if (hitRobot != null)
-                {
-                    //if (hitRobot.HealthPoints >= 1)
-                    //{
-                    RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Down));
-                    break;
-                    //}
-                }
             }
             #endregion
             #region SHOOT LEFT
             for (int i = 1; i <= 4; i++)
             {
-                if (robot.RobotPosition.X - i >= 0 && !(currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X - i] is Wall))
-                    hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X - i && hr.RobotPosition.Y == robot.RobotPosition.Y);
+                if (robot.RobotPosition.X - i >= 0)
+                    if (currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X - i] is Wall)
+                    {
+                        RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Left));
+                        break;
+                    }
+                    else
+                    {
+                        hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X - i && hr.RobotPosition.Y == robot.RobotPosition.Y);
+                        if (hitRobot != null)
+                        {
+                            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Left));
+                            break;
+                        }
+                    }
                 else
                     break;
-                if (hitRobot != null)
-                {
-                    //if (hitRobot.HealthPoints >= 1)
-                    //{
-                    RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Left));
-                    break;
-                    //}
-                }
             }
             #endregion
             #endregion
