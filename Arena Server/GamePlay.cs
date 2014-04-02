@@ -122,10 +122,10 @@ namespace Common_Library
                         if (move.MadeMove != MoveType.Disconnect)
                         {
                             move.MyPay = ScoreDictionary[move.Robot];
-                            var mapForRobot = _currentMap.getSmallerPartForRobot(client.Value.RobotPosition).SerializeMap();
-                            var roundNumber = _movesToScore.Find(m => m.Robot.Equals(client.Value)).CurrentRound;
-                            var response = new GamePlayServerResponse(roundNumber, client.Value.RobotPosition, move.MyPay,
-                                totalPay, client.Value.HasBigItem, client.Value.SmallItem, _movesToScore.Find(m => m.Client.Equals(client.Key)).Consequence, _movesToScore.Find(m => m.Client.Equals(client.Key)).Response);
+                            var mapForRobot = _currentMap.getSmallerPartForRobot(move.Robot.RobotPosition).SerializeMap();
+                            var roundNumber = move.CurrentRound;
+                            var response = new GamePlayServerResponse(roundNumber, move.Robot.RobotPosition, move.MyPay,
+                                totalPay, move.Robot.HasBigItem, move.Robot.SmallItem, move.Consequence, move.Response);
                             try { client.Key.reciveGamePlayData(mapForRobot, response); }
                             catch (Exception e) { EventLog.WriteErrorToLog(strLogPath, e); }
                             EventLog.WriteMessageToLog(strLogPath, "Client: " + client.Value.Login + " receive " + move.MyPay.ToString() + " points for move " + move.MadeMove.ToString());

@@ -139,6 +139,10 @@ namespace Common_Library
                 for (int j = xStartMapOffset; j <= xEndMapOffset; j++)
                 {
                     l++;
+                    if (globalMap[i, j] is Wall)
+                        smallerMap.WallList.Add(globalMap[i, j]);
+                    if (globalMap[i, j] is Floor)
+                        smallerMap.FloorList.Add(globalMap[i, j]);
                     if (globalMap[i, j].HasBigItem) smallerMap.BigItemList.Add(new BigItem(j, i));
                     if (globalMap[i, j].IsStartingPosition) smallerMap.StartingPositionList.Add(new Position(j, i));
                     if (globalMap[i, j].SmallItemNumber > 0) smallerMap.smallItemList.Add(new SmallItem(j, i));
