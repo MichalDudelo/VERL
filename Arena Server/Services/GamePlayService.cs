@@ -636,7 +636,12 @@ namespace Arena_Server.Services
 
                 try
                 {
+#if !DEBUG
                     Thread.Sleep((int)_roundTime);
+#else
+                    while (_currentMovesQueue.Count != _numberOfLoggedRobots)
+                        Thread.Sleep(1000);
+#endif
                 }
                 catch (ThreadInterruptedException e) // wake up!
                 {
@@ -647,7 +652,7 @@ namespace Arena_Server.Services
                 foreach (var history in _globalHistory[_currentRound])
                     if (_currentMovesQueue.Exists(m => m.Robot.Login.Equals(history.RobotLogin)))
                         history.MadeMove = _currentMovesQueue.Find(m => m.Robot.Login.Equals(history.RobotLogin)).MadeMove;
-
+              
                 var TimeoutPlayers = avatarDictionary.Keys.ToList<IArenaCallback>().FindAll(client => !_currentMovesQueue.Exists(m => m.Client.Equals(client)));
 
 
@@ -664,7 +669,8 @@ namespace Arena_Server.Services
                 if (_disconnectedRobotAvatarList.Count > 0)
                     foreach (var robot in _disconnectedRobotAvatarList)
                         _currentMovesQueue.Add(new Move(MoveType.DisconnectedPlayer, robot));
-
+             
+                
                 var roundScore = GamePlay.PlayTurn(_currentMovesQueue, _globalHistory);
 
                 _scoreCounter.AddScore(_currentRound, roundScore);
