@@ -62,9 +62,11 @@ namespace Common_Library.Infrastructure
 
         public GamePlayServerResponse(int roundNumber, Position myPosition, double MyCurrentPay, double TotalPay, bool HasBigItem, int SmallItem,MoveConsequence Consequence, GamePlayServerResponse response)
         {
+            RoundNumber = roundNumber;
             _myCurrentPay = MyCurrentPay;
             _totalPay = TotalPay;
             _hasBigItem = HasBigItem;
+            _smallItemNumber = SmallItem;
             this.RoundNumber = roundNumber;
             this.MyPosition = myPosition;
             this._consequence = Consequence;
@@ -78,7 +80,9 @@ namespace Common_Library.Infrastructure
 
         public GamePlayServerResponse(int roundNumber, Position myPosition, bool HasBigItem, int SmallItem, GamePlayServerResponse response)
         {
+            RoundNumber = roundNumber;
             _hasBigItem = HasBigItem;
+            SmallItemNumber = SmallItem;
             this.RoundNumber = roundNumber;
             this.MyPosition = myPosition;
             if (response != null)
