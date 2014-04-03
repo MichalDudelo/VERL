@@ -14,7 +14,7 @@ namespace Common_Library.Infrastructure
             PickBigItem,
             DropBigItem,
             PickSmallItem,
-            Punch,
+           // Punch,
             Shoot,
             Rest,
             WrongAction,

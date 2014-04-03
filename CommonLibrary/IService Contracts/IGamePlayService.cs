@@ -26,8 +26,8 @@ namespace Common_Library.IService_Contracts
         [OperationContract]
         void PickSmallItem(int roundNumber);
 
-        [OperationContract]
-        void Punch(Directions direction,int roundNumber);
+        //[OperationContract]
+        //void Punch(Directions direction,int roundNumber);
 
         [OperationContract]
         void Shoot(Directions direction,int roundNumber);
