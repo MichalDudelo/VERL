@@ -254,7 +254,7 @@ namespace Arena_Server.Services
                 if (_currentMap != null)
                     if (_currentMap.StartingPositionList.Count < _numberOfLoggedRobots)
                     {
-                        client.reciveInitialData(new Map(0, 0).SerializeMap(), InitialServerResponse.Exception("Too many players, no place for you"));
+                        client.reciveInitialData(InitialServerResponse.Exception("Too many players, no place for you"));
                         EventLog.WriteMessageToLog(strLogPath, "ERROR: Client: " + user + " cannot log in because there are too many players");
                         return;
                     }
@@ -279,36 +279,36 @@ namespace Arena_Server.Services
                 {
                     if (_currentMap.StartingPositionNumber < _numberOfLoggedRobots)
                     {
-                        client.reciveInitialData(new Map(0, 0).SerializeMap(), InitialServerResponse.Exception("Too many players, no place for you"));
+                        client.reciveInitialData(InitialServerResponse.Exception("Too many players, no place for you"));
                         EventLog.WriteMessageToLog(strLogPath, "ERROR: Client: " + user + " cannot log in because there are too many players");
 
                         return;
                     }
 
                     robotAvatar.CurrentMapForRobot = CreateStartingPack(client, robotAvatar);
-                    client.reciveInitialData(new Map(0, 0).SerializeMap(), InitialServerResponse.PlayerRegistered(robotAvatar.Color, (int)_roundTime, robotAvatar.RobotPosition, new MapSize(_currentMap.MapWidth,_currentMap.MapHeight)));
+                    client.reciveInitialData( InitialServerResponse.PlayerRegistered(robotAvatar.Color, (int)_roundTime, robotAvatar.RobotPosition, new MapSize(_currentMap.MapWidth,_currentMap.MapHeight)));
                     EventLog.WriteMessageToLog(strLogPath, "Client: " + user + " logged in and recieved Color " + color + " and Starting Position: " + robotAvatar.RobotPosition.ToString());
                 }
                 else
                 {
-                    client.reciveInitialData(new Map(0, 0).SerializeMap(), InitialServerResponse.Exception("Wait for map"));
+                    client.reciveInitialData(InitialServerResponse.Exception("Wait for map"));
                     EventLog.WriteMessageToLog(strLogPath, "Client: " + user + " has to wait for map");
                 }
 
             }
             else if (avatarDictionary.Values.ToList().Exists(c => c.Login.Equals(user)))
             {
-                client.reciveInitialData(new Map(0, 0).SerializeMap(), InitialServerResponse.LoginAlreadyExists());
+                client.reciveInitialData(InitialServerResponse.LoginAlreadyExists());
                 EventLog.WriteMessageToLog(strLogPath, "ERROR: Login of Client: " + user + " already exists");
             }
             else if (_isGameStarted)
             {
-                client.reciveInitialData(new Map(0, 0).SerializeMap(), InitialServerResponse.Exception("Game already started, wait for the end!"));
+                client.reciveInitialData(InitialServerResponse.Exception("Game already started, wait for the end!"));
                 EventLog.WriteMessageToLog(strLogPath, "ERROR: Game Started!");
             }
             else
             {
-                client.reciveInitialData(new Map(0, 0).SerializeMap(), InitialServerResponse.Exception("Maximal number of players 9. Sorry no place for you!"));
+                client.reciveInitialData(InitialServerResponse.Exception("Maximal number of players 9. Sorry no place for you!"));
                 EventLog.WriteMessageToLog(strLogPath, "ERROR: Too many players");
             }
 
@@ -612,15 +612,15 @@ namespace Arena_Server.Services
                     client.Value.Team = team;
                 }
 
-                client.Key.gamePlayStarted(_roundNumber, team);
+                client.Key.gamePlayStarted(client.Value.CurrentMapForRobot.SerializeMap(),_roundNumber, team); // send team with initialMap
                 EventLog.WriteMessageToLog(strLogPath, "Client: " + client.Value.Login + " is in TEAM: " + team);
             }
             #endregion
 
-            #region Send visible map
-            foreach (var client in avatarDictionary)
-            client.Key.reciveInitialData(client.Value.CurrentMapForRobot.SerializeMap(), InitialServerResponse.PlayerRegistered(avatarDictionary[client.Key].Color, (int)_roundTime, client.Value.RobotPosition,new MapSize(_currentMap.MapWidth, _currentMap.MapHeight)));
-            #endregion
+           // #region Send visible map
+            //foreach (var client in avatarDictionary)
+           // client.Key.reciveInitialData(InitialServerResponse.PlayerRegistered(avatarDictionary[client.Key].Color, (int)_roundTime, client.Value.RobotPosition,new MapSize(_currentMap.MapWidth, _currentMap.MapHeight)));
+           // #endregion
 
             _isGameStarted = true;
             _globalHistory = new Dictionary<int, List<ActionHistory>>();
