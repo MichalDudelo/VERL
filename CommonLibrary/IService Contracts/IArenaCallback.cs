@@ -12,7 +12,7 @@ namespace Common_Library.IService_Contracts
     public interface IArenaCallback
     {
         [OperationContract(IsOneWay = true)]
-        void reciveInitialData(byte[] initialMap, InitialServerResponse response);
+        void reciveInitialData(InitialServerResponse response);
         
         [OperationContract(IsOneWay = true)]
         void reciveGamePlayData(byte[] initialMap, GamePlayServerResponse response);
@@ -27,6 +27,6 @@ namespace Common_Library.IService_Contracts
         void gamePlayEnd(double finalScore);
 
         [OperationContract(IsOneWay=true)]
-        void gamePlayStarted(int initialGameNumber, string team);
+        void gamePlayStarted(byte[] initialMap,int initialGameNumber, string team);
     }
 }

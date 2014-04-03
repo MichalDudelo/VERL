@@ -17,8 +17,8 @@ namespace Common_Library.Infrastructure
     [ServiceBehavior(UseSynchronizationContext = false, ConcurrencyMode = ConcurrencyMode.Reentrant, InstanceContextMode = InstanceContextMode.Single)]
     public class CallbackHandler: Common_Library.IService_Contracts.IArenaCallback
     {
-        private static Action<Map, InitialServerResponse> _loginAction;
-        public static void RegisterLoginAction(Action<Map, InitialServerResponse> Action)
+        private static Action<InitialServerResponse> _loginAction;
+        public static void RegisterLoginAction(Action<InitialServerResponse> Action)
         {
             _loginAction = Action;
         }
@@ -51,20 +51,20 @@ namespace Common_Library.Infrastructure
             _endGameAction = Action;
         }
 
-        private static Action<int, string> _startGameAction;
+        private static Action<Map,int, string> _startGameAction;
 
-        public static void RegisterStartGameAction(Action<int, string> Action)
+        public static void RegisterStartGameAction(Action<Map,int, string> Action)
         {
             _startGameAction = Action;
         }
 
        
         
-        public  void reciveInitialData(byte[] initialMap, InitialServerResponse response)
+        public  void reciveInitialData( InitialServerResponse response)
         {
           
             if (_loginAction != null)
-                _loginAction.BeginInvoke(Map.Deserialize(initialMap),response, a => _loginAction.EndInvoke(a),null);
+                _loginAction.BeginInvoke(response, a => _loginAction.EndInvoke(a),null);
         }
 
 
@@ -94,10 +94,10 @@ namespace Common_Library.Infrastructure
                 _endGameAction.BeginInvoke(finalScore, a => _endGameAction.EndInvoke(a), null);
         }
 
-        public void gamePlayStarted(int roundNumber, string team)
+        public void gamePlayStarted(byte[] currentMap,int roundNumber, string team)
         {
             if (_startGameAction != null)
-                _startGameAction.BeginInvoke(roundNumber,team, a => _startGameAction.EndInvoke(a), null);
+                _startGameAction.BeginInvoke(Map.Deserialize(currentMap), roundNumber, team, a => _startGameAction.EndInvoke(a), null);
         }
     }
 }
