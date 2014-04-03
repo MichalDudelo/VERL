@@ -50,9 +50,9 @@ namespace Clients_Library
             ipAddress = ip;
             //_callbackHandler = ClientServiceLocator.Instance.Find<CallbackHandler>();
             InitializeServerConnection();
-            CallbackHandler.RegisterLoginAction((map, response) => InitialMessageReciveEvent(this, new InitialMessageRecivedArgs(map,response)));
-            CallbackHandler.RegisterStartGameAction((roundNumber, team) => GameStartEvent(this, new GamePlayArgs(roundNumber, team, false)));
-            CallbackHandler.RegisterEndGameAction(finalScore => GameEndEvent(this, new GamePlayArgs(finalScore, null, true)));
+            CallbackHandler.RegisterLoginAction((response) => InitialMessageReciveEvent(this, new InitialMessageRecivedArgs(response)));
+            CallbackHandler.RegisterStartGameAction((map,roundNumber, team) => GameStartEvent(this, new GamePlayArgs(map,roundNumber, team, false)));
+            CallbackHandler.RegisterEndGameAction(finalScore => GameEndEvent(this, new GamePlayArgs(new Map(0,0),finalScore, null, true)));
             CallbackHandler.RegisterGamePlayAction((map, response) => GamePlayMessageReciveEvent(this, new MessageRecivedArgs(map, response)));
             CallbackHandler.RegisterBeginRoundAction((roundNumber,possibleMoveList) => RoundStartEvent(this, new GameRoundArgs(roundNumber,possibleMoveList )));
             CallbackHandler.RegisterEndRoundAction(roundNumber => RoundEndEvent(this, new GameRoundArgs(roundNumber)));

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common_Library;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,8 +12,10 @@ namespace Clients_Library.Infrastructure
         public double finalScore;
         public int initalRoundNumber;
         public string team;
-        public GamePlayArgs(double number, string team, bool final)
+        public Map map;
+        public GamePlayArgs(Map map,double number, string team, bool final)
         {
+            this.map = map;
             if (final)
                 this.finalScore = number;
             else
