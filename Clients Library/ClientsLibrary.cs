@@ -229,30 +229,30 @@ namespace Clients_Library
             return true;
         }
 
-        public bool Punch(Directions direction, int roundNumber)
-        {
-            try
-            {
+        //public bool Punch(Directions direction, int roundNumber)
+        //{
+        //    try
+        //    {
 
-                _gamePlayChannel.Proxy.Punch(direction, roundNumber);
-            }
-            catch (EndpointNotFoundException e)
-            {
-                Console.WriteLine("Endpoind not found");
-                return false;
-            }
-            catch (FaultException e)
-            {
-                Console.WriteLine("Fault exception");
-                return false;
-            }
-            catch (TimeoutException e)
-            {
-                Console.WriteLine("Timeout exception");
-                return false;
-            }
-            return true;
-        }
+        //        _gamePlayChannel.Proxy.Punch(direction, roundNumber);
+        //    }
+        //    catch (EndpointNotFoundException e)
+        //    {
+        //        Console.WriteLine("Endpoind not found");
+        //        return false;
+        //    }
+        //    catch (FaultException e)
+        //    {
+        //        Console.WriteLine("Fault exception");
+        //        return false;
+        //    }
+        //    catch (TimeoutException e)
+        //    {
+        //        Console.WriteLine("Timeout exception");
+        //        return false;
+        //    }
+        //    return true;
+        //}
 
         public bool Login(string NickName)
         {
