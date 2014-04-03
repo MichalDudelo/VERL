@@ -685,216 +685,216 @@ namespace TileEngine
                             break;
                         #endregion
                         #region PunchCase
-                        case MoveType.Punch:
+                        //case MoveType.Punch:
 
-                            if (move.WoundedRobot != null)
-                                currentWoundedRobot = robotList.Find(wounded => (wounded.RobotName.Equals(move.WoundedRobot.Login)));
+                        //    if (move.WoundedRobot != null)
+                        //        currentWoundedRobot = robotList.Find(wounded => (wounded.RobotName.Equals(move.WoundedRobot.Login)));
 
-                            switch (move.DirectionOfMove)
-                            {
-                                case Directions.Down:
+                        //    switch (move.DirectionOfMove)
+                        //    {
+                        //        case Directions.Down:
 
-                                    if (turnCounter >= roundTimeMids && turnCounter <= roundTimeMax)
-                                    {
-                                        moveDir = new Vector2(0, movePlus);
-                                        animation = "WalkSouth";
-                                        moveVector += new Vector2(0, movePlus);
+                        //            if (turnCounter >= roundTimeMids && turnCounter <= roundTimeMax)
+                        //            {
+                        //                moveDir = new Vector2(0, movePlus);
+                        //                animation = "WalkSouth";
+                        //                moveVector += new Vector2(0, movePlus);
 
-                                        if (moveDir.Length() != 0)
-                                        {
-                                            currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
+                        //                if (moveDir.Length() != 0)
+                        //                {
+                        //                    currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
 
-                                            if (currentRobot.CurrentAnimation != animation)
-                                                currentRobot.CurrentAnimation = animation;
-
-
-                                        }
+                        //                    if (currentRobot.CurrentAnimation != animation)
+                        //                        currentRobot.CurrentAnimation = animation;
 
 
-                                    }
-                                    else if (turnCounter < roundTimeMids && turnCounter >= 0)
-                                    {
-                                        moveDir = new Vector2(0, moveMinus);
-                                        animation = "WalkSouth";
-                                        moveVector += new Vector2(0, moveMinus);
-
-                                        if (turnCounter >= roundTimeMin)
-                                        {
-                                            if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
-                                                currentWoundedRobot.CurrentAnimation = "HitNorth";
-                                        }
-
-                                        if (moveDir.Length() != 0)
-                                        {
-                                            currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
-
-                                            if (currentRobot.CurrentAnimation != animation)
-                                                currentRobot.CurrentAnimation = animation;
-                                        }
-                                        if (turnCounter == 0)
-                                        {
-                                            if (!currentRobot.CurrentAnimation.Contains("Hit"))
-                                                currentRobot.CurrentAnimation = "IdleSouth";
-                                            if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
-                                                currentWoundedRobot.CurrentAnimation = "HitIdleNorth";
-                                        }
-
-                                    }
-
-                                    break;
+                        //                }
 
 
-                                case Directions.Left:
+                        //            }
+                        //            else if (turnCounter < roundTimeMids && turnCounter >= 0)
+                        //            {
+                        //                moveDir = new Vector2(0, moveMinus);
+                        //                animation = "WalkSouth";
+                        //                moveVector += new Vector2(0, moveMinus);
 
-                                    if (turnCounter >= roundTimeMids && turnCounter <= roundTimeMax)
-                                    {
-                                        moveDir = new Vector2(moveMinus, 0);
-                                        animation = "WalkWest";
-                                        moveVector += new Vector2(moveMinus, 0);
+                        //                if (turnCounter >= roundTimeMin)
+                        //                {
+                        //                    if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
+                        //                        currentWoundedRobot.CurrentAnimation = "HitNorth";
+                        //                }
 
-                                        if (moveDir.Length() != 0)
-                                        {
-                                            currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
+                        //                if (moveDir.Length() != 0)
+                        //                {
+                        //                    currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
 
-                                            if (currentRobot.CurrentAnimation != animation)
-                                                currentRobot.CurrentAnimation = animation;
+                        //                    if (currentRobot.CurrentAnimation != animation)
+                        //                        currentRobot.CurrentAnimation = animation;
+                        //                }
+                        //                if (turnCounter == 0)
+                        //                {
+                        //                    if (!currentRobot.CurrentAnimation.Contains("Hit"))
+                        //                        currentRobot.CurrentAnimation = "IdleSouth";
+                        //                    if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
+                        //                        currentWoundedRobot.CurrentAnimation = "HitIdleNorth";
+                        //                }
 
-                                        }
+                        //            }
 
-                                    }
-                                    else if (turnCounter < roundTimeMids && turnCounter >= 0)
-                                    {
-                                        moveDir = new Vector2(movePlus, 0);
-                                        animation = "WalkWest";
-                                        moveVector += new Vector2(movePlus, 0);
-
-                                        if (turnCounter >= roundTimeMin)
-                                        {
-                                            if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
-                                                currentWoundedRobot.CurrentAnimation = "HitEast";
-                                        }
-
-                                        if (moveDir.Length() != 0)
-                                        {
-                                            currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
-
-                                            if (currentRobot.CurrentAnimation != animation)
-                                                currentRobot.CurrentAnimation = animation;
-
-                                        }
-                                        if (turnCounter == 0)
-                                        {
-                                            if (!currentRobot.CurrentAnimation.Contains("Hit"))
-                                                currentRobot.CurrentAnimation = "IdleWest";
-                                            if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
-                                                currentWoundedRobot.CurrentAnimation = "HitIdleEast";
-                                        }
-
-                                    }
+                        //            break;
 
 
-                                    break;
+                        //        case Directions.Left:
 
-                                case Directions.Right:
-                                    if (turnCounter >= roundTimeMids && turnCounter <= roundTimeMax)
-                                    {
-                                        moveDir = new Vector2(movePlus, 0);
-                                        animation = "WalkEast";
-                                        moveVector += new Vector2(movePlus, 0);
+                        //            if (turnCounter >= roundTimeMids && turnCounter <= roundTimeMax)
+                        //            {
+                        //                moveDir = new Vector2(moveMinus, 0);
+                        //                animation = "WalkWest";
+                        //                moveVector += new Vector2(moveMinus, 0);
 
-                                        if (moveDir.Length() != 0)
-                                        {
-                                            currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
+                        //                if (moveDir.Length() != 0)
+                        //                {
+                        //                    currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
 
-                                            if (currentRobot.CurrentAnimation != animation)
-                                                currentRobot.CurrentAnimation = animation;
+                        //                    if (currentRobot.CurrentAnimation != animation)
+                        //                        currentRobot.CurrentAnimation = animation;
 
-                                        }
+                        //                }
 
+                        //            }
+                        //            else if (turnCounter < roundTimeMids && turnCounter >= 0)
+                        //            {
+                        //                moveDir = new Vector2(movePlus, 0);
+                        //                animation = "WalkWest";
+                        //                moveVector += new Vector2(movePlus, 0);
 
-                                    }
-                                    else if (turnCounter < roundTimeMids && turnCounter >= 0)
-                                    {
-                                        moveDir = new Vector2(moveMinus, 0);
-                                        animation = "WalkEast";
-                                        moveVector += new Vector2(moveMinus, 0);
+                        //                if (turnCounter >= roundTimeMin)
+                        //                {
+                        //                    if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
+                        //                        currentWoundedRobot.CurrentAnimation = "HitEast";
+                        //                }
 
-                                        if (turnCounter >= roundTimeMin)
-                                        {
-                                            if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
-                                                currentWoundedRobot.CurrentAnimation = "HitWest";
-                                        }
+                        //                if (moveDir.Length() != 0)
+                        //                {
+                        //                    currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
 
-                                        if (moveDir.Length() != 0)
-                                        {
-                                            currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
+                        //                    if (currentRobot.CurrentAnimation != animation)
+                        //                        currentRobot.CurrentAnimation = animation;
 
-                                            if (currentRobot.CurrentAnimation != animation)
-                                                currentRobot.CurrentAnimation = animation;
+                        //                }
+                        //                if (turnCounter == 0)
+                        //                {
+                        //                    if (!currentRobot.CurrentAnimation.Contains("Hit"))
+                        //                        currentRobot.CurrentAnimation = "IdleWest";
+                        //                    if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
+                        //                        currentWoundedRobot.CurrentAnimation = "HitIdleEast";
+                        //                }
 
-                                        }
-                                        if (turnCounter == 0)
-                                        {
-                                            if (!currentRobot.CurrentAnimation.Contains("Hit"))
-                                                currentRobot.CurrentAnimation = "IdleEast";
-                                            if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
-                                                currentWoundedRobot.CurrentAnimation = "HitIdleWest";
-                                        }
-                                    }
-
-                                    break;
-
-                                case Directions.Up:
-                                    if (turnCounter >= roundTimeMids && turnCounter <= roundTimeMax)
-                                    {
-                                        moveDir = new Vector2(0, moveMinus);
-                                        animation = "WalkNorth";
-                                        moveVector += new Vector2(0, moveMinus);
-
-                                        if (moveDir.Length() != 0)
-                                        {
-                                            currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
-
-                                            if (currentRobot.CurrentAnimation != animation)
-                                                currentRobot.CurrentAnimation = animation;
-
-                                        }
-
-                                    }
-                                    else if (turnCounter < roundTimeMids && turnCounter >= 0)
-                                    {
-                                        moveDir = new Vector2(0, movePlus);
-                                        animation = "WalkNorth";
-                                        moveVector += new Vector2(0, movePlus);
-
-                                        if (turnCounter >= roundTimeMin)
-                                        {
-                                            if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
-                                                currentWoundedRobot.CurrentAnimation = "HitSouth";
-                                        }
-
-                                        if (moveDir.Length() != 0)
-                                        {
-                                            currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
-
-                                            if (currentRobot.CurrentAnimation != animation)
-                                                currentRobot.CurrentAnimation = animation;
-
-                                        }
-                                        if (turnCounter == 0)
-                                        {
-                                            if (!currentRobot.CurrentAnimation.Contains("Hit"))
-                                                currentRobot.CurrentAnimation = "IdleNorth";
-                                            if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
-                                                currentWoundedRobot.CurrentAnimation = "HitIdleSouth";
-                                        }
-                                    }
+                        //            }
 
 
-                                    break;
+                        //            break;
 
-                            }
-                            break;
+                        //        case Directions.Right:
+                        //            if (turnCounter >= roundTimeMids && turnCounter <= roundTimeMax)
+                        //            {
+                        //                moveDir = new Vector2(movePlus, 0);
+                        //                animation = "WalkEast";
+                        //                moveVector += new Vector2(movePlus, 0);
+
+                        //                if (moveDir.Length() != 0)
+                        //                {
+                        //                    currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
+
+                        //                    if (currentRobot.CurrentAnimation != animation)
+                        //                        currentRobot.CurrentAnimation = animation;
+
+                        //                }
+
+
+                        //            }
+                        //            else if (turnCounter < roundTimeMids && turnCounter >= 0)
+                        //            {
+                        //                moveDir = new Vector2(moveMinus, 0);
+                        //                animation = "WalkEast";
+                        //                moveVector += new Vector2(moveMinus, 0);
+
+                        //                if (turnCounter >= roundTimeMin)
+                        //                {
+                        //                    if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
+                        //                        currentWoundedRobot.CurrentAnimation = "HitWest";
+                        //                }
+
+                        //                if (moveDir.Length() != 0)
+                        //                {
+                        //                    currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
+
+                        //                    if (currentRobot.CurrentAnimation != animation)
+                        //                        currentRobot.CurrentAnimation = animation;
+
+                        //                }
+                        //                if (turnCounter == 0)
+                        //                {
+                        //                    if (!currentRobot.CurrentAnimation.Contains("Hit"))
+                        //                        currentRobot.CurrentAnimation = "IdleEast";
+                        //                    if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
+                        //                        currentWoundedRobot.CurrentAnimation = "HitIdleWest";
+                        //                }
+                        //            }
+
+                        //            break;
+
+                        //        case Directions.Up:
+                        //            if (turnCounter >= roundTimeMids && turnCounter <= roundTimeMax)
+                        //            {
+                        //                moveDir = new Vector2(0, moveMinus);
+                        //                animation = "WalkNorth";
+                        //                moveVector += new Vector2(0, moveMinus);
+
+                        //                if (moveDir.Length() != 0)
+                        //                {
+                        //                    currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
+
+                        //                    if (currentRobot.CurrentAnimation != animation)
+                        //                        currentRobot.CurrentAnimation = animation;
+
+                        //                }
+
+                        //            }
+                        //            else if (turnCounter < roundTimeMids && turnCounter >= 0)
+                        //            {
+                        //                moveDir = new Vector2(0, movePlus);
+                        //                animation = "WalkNorth";
+                        //                moveVector += new Vector2(0, movePlus);
+
+                        //                if (turnCounter >= roundTimeMin)
+                        //                {
+                        //                    if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
+                        //                        currentWoundedRobot.CurrentAnimation = "HitSouth";
+                        //                }
+
+                        //                if (moveDir.Length() != 0)
+                        //                {
+                        //                    currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
+
+                        //                    if (currentRobot.CurrentAnimation != animation)
+                        //                        currentRobot.CurrentAnimation = animation;
+
+                        //                }
+                        //                if (turnCounter == 0)
+                        //                {
+                        //                    if (!currentRobot.CurrentAnimation.Contains("Hit"))
+                        //                        currentRobot.CurrentAnimation = "IdleNorth";
+                        //                    if (currentWoundedRobot != null && move.HostileMode && currentWoundedRobot.CurrentAnimation != "Burning")
+                        //                        currentWoundedRobot.CurrentAnimation = "HitIdleSouth";
+                        //                }
+                        //            }
+
+
+                        //            break;
+
+                        //    }
+                        //    break;
                         #endregion
                         #region RestCase
                         case MoveType.Rest:

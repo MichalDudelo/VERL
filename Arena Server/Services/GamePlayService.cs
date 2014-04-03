@@ -503,23 +503,22 @@ namespace Arena_Server.Services
 
 
 
-        public void Punch(Directions direction, int round)
-        {
+        //public void Punch(Directions direction, int round)
+        //{
 
-            var client = OperationContext.Current.GetCallbackChannel<IArenaCallback>();
-            var robot = avatarDictionary[client];
-            {
-            if (round == _currentRound)
-                if (!_currentMovesQueue.Enqueue(new Move(MoveType.Punch, _currentMap, client, avatarDictionary, robot, direction, _currentRound, _hostileMode)))
-                {
-                    if (robot.ErrorNumber++ > 10)
-                        Disconnect(client);
-                    client.reciveGamePlayData(_currentMap.getSmallerPartForRobot(robot.RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, avatarDictionary[client].RobotPosition, 0, 0, avatarDictionary[client].HasBigItem, avatarDictionary[client].SmallItem, MoveConsequence.TimeOut, GamePlayServerResponse.InvalidMoveMessage("You cannot move two times in one round")));
-                    EventLog.WriteMessageToLog(strLogPath, "ERROR: Client: " + robot.Login + " moved two times in one round");
-                }
-            EventLog.WriteMessageToLog(strLogPath, "Client: " + robot.Login + " Punched in direction " + direction.ToString() + " in round " + round.ToString());
-        }
-        }
+        //    var client = OperationContext.Current.GetCallbackChannel<IArenaCallback>();
+        //    var robot = avatarDictionary[client];
+        //    if (round == _currentRound)
+        //        if (!_currentMovesQueue.Enqueue(new Move(MoveType.Punch, _currentMap, client, avatarDictionary, robot, direction, _currentRound, _hostileMode)))
+        //        {
+        //            if (robot.ErrorNumber++ > 10)
+        //                Disconnect(client);
+        //            client.reciveGamePlayData(_currentMap.getSmallerPartForRobot(robot.RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, avatarDictionary[client].RobotPosition, 0, 0, avatarDictionary[client].HasBigItem, avatarDictionary[client].SmallItem, MoveConsequence.TimeOut, GamePlayServerResponse.InvalidMoveMessage("You cannot move two times in one round")));
+        //            EventLog.WriteMessageToLog(strLogPath, "ERROR: Client: " + robot.Login + " moved two times in one round");
+        //        }
+        //    EventLog.WriteMessageToLog(strLogPath, "Client: " + robot.Login + " Punched in direction " + direction.ToString() + " in round " + round.ToString());
+
+        //}
 
 
 
@@ -674,7 +673,7 @@ namespace Arena_Server.Services
                 foreach (var history in _globalHistory[_currentRound])
                     if (_currentMovesQueue.Exists(m => m.Robot.Login.Equals(history.RobotLogin)))
                         history.MadeMove = _currentMovesQueue.Find(m => m.Robot.Login.Equals(history.RobotLogin)).MadeMove;
-
+              
                 var TimeoutPlayers = avatarDictionary.Keys.ToList<IArenaCallback>().FindAll(client => !_currentMovesQueue.Exists(m => m.Client.Equals(client)));
 
 
@@ -691,7 +690,7 @@ namespace Arena_Server.Services
                 if (_disconnectedRobotAvatarList.Count > 0)
                     foreach (var robot in _disconnectedRobotAvatarList)
                         _currentMovesQueue.Add(new Move(MoveType.DisconnectedPlayer, robot));
-
+             
                 
                 var roundScore = GamePlay.PlayTurn(_currentMovesQueue, _globalHistory);
 

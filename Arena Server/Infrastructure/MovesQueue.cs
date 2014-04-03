@@ -36,9 +36,9 @@ namespace Arena_Server.Infrastructure
 
                     try
                     {
-                        if (this.Exists(m => m.MadeMove == Common_Library.Infrastructure.MoveType.Shoot || m.MadeMove == Common_Library.Infrastructure.MoveType.Punch))
+                        if (this.Exists(m => m.MadeMove == Common_Library.Infrastructure.MoveType.Shoot))
                         {
-                            var move = this.First(m => m.MadeMove == Common_Library.Infrastructure.MoveType.Shoot || m.MadeMove == Common_Library.Infrastructure.MoveType.Punch);
+                            var move = this.First(m => m.MadeMove == Common_Library.Infrastructure.MoveType.Shoot );
                             item = move;
                             this.RemoveAt(this.IndexOf(item));
                         }

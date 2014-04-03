@@ -24,6 +24,7 @@ namespace Arena_Server.Infrastructure
         private MoveConsequence _consequence;
         private double _myPay;
         private bool _isWallShooted = false;
+        private bool _isRobotShooted = false;
 
         public double MyPay
         {
@@ -93,7 +94,7 @@ namespace Arena_Server.Infrastructure
         public RobotAvatar WoundedRobot
         {
             get { return woundedRobot; }
-            set { if (this.madeMove == MoveType.Punch || this.madeMove == MoveType.Shoot) woundedRobot = value; }
+            set { if  (this.madeMove == MoveType.Shoot) woundedRobot = value; }
         }
 
         public Directions DirectionOfMove
@@ -407,218 +408,218 @@ namespace Arena_Server.Infrastructure
                 }
             }
         }
-        public Move PunchAction()
-        {
-            RobotAvatar hitRobot;
+        //public Move PunchAction()
+        //{
+        //    RobotAvatar hitRobot;
 
-            if (robot.IsHealed == false)
-            {
-                if (robot.HealRounds-- == 1) { robot.IsHealed = true; robot.HealthPoints = 5; };
-                return this.BurnAction();
-            }
-            switch (DirectionOfMove)
-            {
-                case Directions.Up:
-                    if (robot.RobotPosition.Y - 1 >= 1)
-                    {
-                        hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y - 1);
-                        if (hitRobot != null)
-                        {
-                            if (hitRobot.HealthPoints >= 1)
-                            {
-                                if (_hostileMode)
-                                    hitRobot.HealthPoints = hitRobot.HealthPoints - 2;
-                                response = GamePlayServerResponse.OK();
-                                var woundedClient = _avatarDictionary.FirstOrDefault(wc => wc.Value == hitRobot).Key;
-                                response = GamePlayServerResponse.Wounded();
-                                woundedRobot = _avatarDictionary[woundedClient];
-                                woundedClient.reciveGamePlayData(_currentMap.getSmallerPartForRobot(_avatarDictionary[woundedClient].RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, woundedRobot.RobotPosition, woundedRobot.HasBigItem, woundedRobot.SmallItem, response));
+        //    if (robot.IsHealed == false)
+        //    {
+        //        if (robot.HealRounds-- == 1) { robot.IsHealed = true; robot.HealthPoints = 5; };
+        //        return this.BurnAction();
+        //    }
+        //    switch (DirectionOfMove)
+        //    {
+        //        case Directions.Up:
+        //            if (robot.RobotPosition.Y - 1 >= 1)
+        //            {
+        //                hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y - 1);
+        //                if (hitRobot != null)
+        //                {
+        //                    if (hitRobot.HealthPoints >= 1)
+        //                    {
+        //                        if (_hostileMode)
+        //                            hitRobot.HealthPoints = hitRobot.HealthPoints - 2;
+        //                        response = GamePlayServerResponse.OK();
+        //                        var woundedClient = _avatarDictionary.FirstOrDefault(wc => wc.Value == hitRobot).Key;
+        //                        response = GamePlayServerResponse.Wounded();
+        //                        woundedRobot = _avatarDictionary[woundedClient];
+        //                        woundedClient.reciveGamePlayData(_currentMap.getSmallerPartForRobot(_avatarDictionary[woundedClient].RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, woundedRobot.RobotPosition, woundedRobot.HasBigItem, woundedRobot.SmallItem, response));
 
-                                if (hitRobot.HealthPoints <= 0)
-                                {
-                                    hitRobot.IsHealed = false;
-                                    hitRobot.HealRounds = healNumberRounds;
-                                }
-                                break;
+        //                        if (hitRobot.HealthPoints <= 0)
+        //                        {
+        //                            hitRobot.IsHealed = false;
+        //                            hitRobot.HealRounds = healNumberRounds;
+        //                        }
+        //                        break;
 
-                            }
-                            else
-                            {
-                                response = GamePlayServerResponse.OK();
-                                //robot.ErrorNumber++;
-                                //response = GamePlayServerResponse.InvalidMoveMessage("Hit robot is already damaged");
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            robot.ErrorNumber++;
-                            response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        robot.ErrorNumber++;
-                        response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
-                    }
-                    break;
+        //                    }
+        //                    else
+        //                    {
+        //                        response = GamePlayServerResponse.OK();
+        //                        //robot.ErrorNumber++;
+        //                        //response = GamePlayServerResponse.InvalidMoveMessage("Hit robot is already damaged");
+        //                        break;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    robot.ErrorNumber++;
+        //                    response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
+        //                    break;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                robot.ErrorNumber++;
+        //                response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
+        //            }
+        //            break;
 
-                case Directions.Right:
-                    if (robot.RobotPosition.X + 1 < +_currentMap.MapWidth - 1)
-                    {
-                        hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + 1 && hr.RobotPosition.Y == robot.RobotPosition.Y);
-                        if (hitRobot != null)
-                        {
-                            if (hitRobot.HealthPoints >= 1)
-                            {
-                                if (_hostileMode)
-                                    hitRobot.HealthPoints = hitRobot.HealthPoints - 2;
-                                response = GamePlayServerResponse.OK();
-                                var woundedClient = _avatarDictionary.FirstOrDefault(wc => wc.Value == hitRobot).Key;
-                                this.response = GamePlayServerResponse.Wounded();
-                                woundedRobot = _avatarDictionary[woundedClient];
-                                woundedClient.reciveGamePlayData(_currentMap.getSmallerPartForRobot(_avatarDictionary[woundedClient].RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, woundedRobot.RobotPosition, woundedRobot.HasBigItem, woundedRobot.SmallItem, response));
+        //        case Directions.Right:
+        //            if (robot.RobotPosition.X + 1 < +_currentMap.MapWidth - 1)
+        //            {
+        //                hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + 1 && hr.RobotPosition.Y == robot.RobotPosition.Y);
+        //                if (hitRobot != null)
+        //                {
+        //                    if (hitRobot.HealthPoints >= 1)
+        //                    {
+        //                        if (_hostileMode)
+        //                            hitRobot.HealthPoints = hitRobot.HealthPoints - 2;
+        //                        response = GamePlayServerResponse.OK();
+        //                        var woundedClient = _avatarDictionary.FirstOrDefault(wc => wc.Value == hitRobot).Key;
+        //                        this.response = GamePlayServerResponse.Wounded();
+        //                        woundedRobot = _avatarDictionary[woundedClient];
+        //                        woundedClient.reciveGamePlayData(_currentMap.getSmallerPartForRobot(_avatarDictionary[woundedClient].RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, woundedRobot.RobotPosition, woundedRobot.HasBigItem, woundedRobot.SmallItem, response));
 
-                                if (hitRobot.HealthPoints <= 0)
-                                {
-                                    hitRobot.IsHealed = false;
-                                    hitRobot.HealRounds = healNumberRounds;
-                                }
-                                break;
+        //                        if (hitRobot.HealthPoints <= 0)
+        //                        {
+        //                            hitRobot.IsHealed = false;
+        //                            hitRobot.HealRounds = healNumberRounds;
+        //                        }
+        //                        break;
 
-                            }
-                            else
-                            {
-                                response = GamePlayServerResponse.OK();
-                                //robot.ErrorNumber++;
-                                //response = GamePlayServerResponse.InvalidMoveMessage("Hit robot is already damaged");
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            robot.ErrorNumber++;
-                            response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        robot.ErrorNumber++;
-                        response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
-                    }
-                    break;
+        //                    }
+        //                    else
+        //                    {
+        //                        response = GamePlayServerResponse.OK();
+        //                        //robot.ErrorNumber++;
+        //                        //response = GamePlayServerResponse.InvalidMoveMessage("Hit robot is already damaged");
+        //                        break;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    robot.ErrorNumber++;
+        //                    response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
+        //                    break;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                robot.ErrorNumber++;
+        //                response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
+        //            }
+        //            break;
 
-                case Directions.Down:
-                    if (robot.RobotPosition.Y + 1 < _currentMap.MapHeight - 1)
-                    {
-                        hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y + 1);
-                        if (hitRobot != null)
-                        {
-                            if (hitRobot.HealthPoints >= 1)
-                            {
-                                if (_hostileMode)
-                                    hitRobot.HealthPoints = hitRobot.HealthPoints - 2;
-                                response = GamePlayServerResponse.OK();
-                                var woundedClient = _avatarDictionary.FirstOrDefault(wc => wc.Value == hitRobot).Key;
-                                this.response = GamePlayServerResponse.Wounded();
-                                woundedRobot = _avatarDictionary[woundedClient];
-                                woundedClient.reciveGamePlayData(_currentMap.getSmallerPartForRobot(_avatarDictionary[woundedClient].RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, woundedRobot.RobotPosition, woundedRobot.HasBigItem, woundedRobot.SmallItem, response));
+        //        case Directions.Down:
+        //            if (robot.RobotPosition.Y + 1 < _currentMap.MapHeight - 1)
+        //            {
+        //                hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y + 1);
+        //                if (hitRobot != null)
+        //                {
+        //                    if (hitRobot.HealthPoints >= 1)
+        //                    {
+        //                        if (_hostileMode)
+        //                            hitRobot.HealthPoints = hitRobot.HealthPoints - 2;
+        //                        response = GamePlayServerResponse.OK();
+        //                        var woundedClient = _avatarDictionary.FirstOrDefault(wc => wc.Value == hitRobot).Key;
+        //                        this.response = GamePlayServerResponse.Wounded();
+        //                        woundedRobot = _avatarDictionary[woundedClient];
+        //                        woundedClient.reciveGamePlayData(_currentMap.getSmallerPartForRobot(_avatarDictionary[woundedClient].RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, woundedRobot.RobotPosition, woundedRobot.HasBigItem, woundedRobot.SmallItem, response));
 
-                                if (hitRobot.HealthPoints <= 0)
-                                {
-                                    hitRobot.IsHealed = false;
-                                    hitRobot.HealRounds = healNumberRounds;
-                                }
-                                break;
+        //                        if (hitRobot.HealthPoints <= 0)
+        //                        {
+        //                            hitRobot.IsHealed = false;
+        //                            hitRobot.HealRounds = healNumberRounds;
+        //                        }
+        //                        break;
 
-                            }
-                            else
-                            {
-                                response = GamePlayServerResponse.OK();
-                                //robot.ErrorNumber++;
-                                //response = GamePlayServerResponse.InvalidMoveMessage("Hit robot is already damaged");
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            robot.ErrorNumber++;
-                            response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        robot.ErrorNumber++;
-                        response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
-                    }
+        //                    }
+        //                    else
+        //                    {
+        //                        response = GamePlayServerResponse.OK();
+        //                        //robot.ErrorNumber++;
+        //                        //response = GamePlayServerResponse.InvalidMoveMessage("Hit robot is already damaged");
+        //                        break;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    robot.ErrorNumber++;
+        //                    response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
+        //                    break;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                robot.ErrorNumber++;
+        //                response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
+        //            }
 
-                    break;
+        //            break;
 
-                case Directions.Left:
-                    if (robot.RobotPosition.X - 1 >= 1)
-                    {
-                        hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X - 1 && hr.RobotPosition.Y == robot.RobotPosition.Y);
-                        if (hitRobot != null)
-                        {
-                            if (hitRobot.HealthPoints >= 1)
-                            {
-                                if (_hostileMode)
-                                    hitRobot.HealthPoints = hitRobot.HealthPoints - 2;
-                                response = GamePlayServerResponse.OK();
-                                var woundedClient = _avatarDictionary.FirstOrDefault(wc => wc.Value == hitRobot).Key;
-                                this.response = GamePlayServerResponse.Wounded();
-                                woundedRobot = _avatarDictionary[woundedClient];
-                                woundedClient.reciveGamePlayData(_currentMap.getSmallerPartForRobot(_avatarDictionary[woundedClient].RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, woundedRobot.RobotPosition, woundedRobot.HasBigItem, woundedRobot.SmallItem, response));
+        //        case Directions.Left:
+        //            if (robot.RobotPosition.X - 1 >= 1)
+        //            {
+        //                hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X - 1 && hr.RobotPosition.Y == robot.RobotPosition.Y);
+        //                if (hitRobot != null)
+        //                {
+        //                    if (hitRobot.HealthPoints >= 1)
+        //                    {
+        //                        if (_hostileMode)
+        //                            hitRobot.HealthPoints = hitRobot.HealthPoints - 2;
+        //                        response = GamePlayServerResponse.OK();
+        //                        var woundedClient = _avatarDictionary.FirstOrDefault(wc => wc.Value == hitRobot).Key;
+        //                        this.response = GamePlayServerResponse.Wounded();
+        //                        woundedRobot = _avatarDictionary[woundedClient];
+        //                        woundedClient.reciveGamePlayData(_currentMap.getSmallerPartForRobot(_avatarDictionary[woundedClient].RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, woundedRobot.RobotPosition, woundedRobot.HasBigItem, woundedRobot.SmallItem, response));
 
-                                if (hitRobot.HealthPoints <= 0)
-                                {
-                                    hitRobot.IsHealed = false;
-                                    hitRobot.HealRounds = healNumberRounds;
-                                }
-                                break;
+        //                        if (hitRobot.HealthPoints <= 0)
+        //                        {
+        //                            hitRobot.IsHealed = false;
+        //                            hitRobot.HealRounds = healNumberRounds;
+        //                        }
+        //                        break;
 
-                            }
-                            else
-                            {
-                                response = GamePlayServerResponse.OK();
-                                //robot.ErrorNumber++;
-                                //response = GamePlayServerResponse.InvalidMoveMessage("Hit robot is already damaged");
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            robot.ErrorNumber++;
-                            response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        robot.ErrorNumber++;
-                        response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
-                    }
-                    break;
-            }
-            if (response.ServerState == ServerState.INVALID_MOVE)
-            {
-                if (response.Message == "Hit robot is already damaged")
-                    Consequence = MoveConsequence.InvalidMove_PunchedPlayerWithNoHealthPoints;
-                else
-                    Consequence = MoveConsequence.InvalidMove_PunchedEmptySpace;
-                MadeMove = MoveType.WrongAction;
-                return this;
-            }
-            else
-            {
-                Consequence = MoveConsequence.PunchedPlayer;
-                return this;
-            }
+        //                    }
+        //                    else
+        //                    {
+        //                        response = GamePlayServerResponse.OK();
+        //                        //robot.ErrorNumber++;
+        //                        //response = GamePlayServerResponse.InvalidMoveMessage("Hit robot is already damaged");
+        //                        break;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    robot.ErrorNumber++;
+        //                    response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
+        //                    break;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                robot.ErrorNumber++;
+        //                response = GamePlayServerResponse.InvalidMoveMessage("Field chosen to hit contains no robot");
+        //            }
+        //            break;
+        //    }
+        //    if (response.ServerState == ServerState.INVALID_MOVE)
+        //    {
+        //        if (response.Message == "Hit robot is already damaged")
+        //            Consequence = MoveConsequence.InvalidMove_PunchedPlayerWithNoHealthPoints;
+        //        else
+        //            Consequence = MoveConsequence.InvalidMove_PunchedEmptySpace;
+        //        MadeMove = MoveType.WrongAction;
+        //        return this;
+        //    }
+        //    else
+        //    {
+        //        Consequence = MoveConsequence.PunchedPlayer;
+        //        return this;
+        //    }
 
-        }
+        //}
         public Move ShootAction()
         {
             RobotAvatar hitRobot;
@@ -644,6 +645,7 @@ namespace Arena_Server.Infrastructure
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y - i);
                             if (hitRobot != null)
                             {
+                                _isRobotShooted = true;
                                 if (hitRobot.HealthPoints >= 1)
                                 {
                                     if (_hostileMode)
@@ -696,6 +698,7 @@ namespace Arena_Server.Infrastructure
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + i && hr.RobotPosition.Y == robot.RobotPosition.Y);
                             if (hitRobot != null)
                             {
+                                _isRobotShooted = true;
                                 if (hitRobot.HealthPoints >= 1)
                                 {
                                     if (_hostileMode)
@@ -748,6 +751,7 @@ namespace Arena_Server.Infrastructure
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y + i);
                             if (hitRobot != null)
                             {
+                                _isRobotShooted = true;
                                 if (hitRobot.HealthPoints >= 1)
                                 {
                                     if (_hostileMode)
@@ -801,6 +805,7 @@ namespace Arena_Server.Infrastructure
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X - i && hr.RobotPosition.Y == robot.RobotPosition.Y);
                             if (hitRobot != null)
                             {
+                                _isRobotShooted = true;
                                 if (hitRobot.HealthPoints >= 1)
                                 {
                                     if (_hostileMode)
@@ -853,6 +858,11 @@ namespace Arena_Server.Infrastructure
                 {
                     Consequence = MoveConsequence.ShotAndHitWall;
                     _isWallShooted = false;
+                }
+                else if (_isRobotShooted)
+                {
+                    Consequence = MoveConsequence.ShootAndNothingHappen;
+                    _isRobotShooted = false;
                 }
                 else
                     Consequence = MoveConsequence.ShotAndHitPlayer;
@@ -932,137 +942,141 @@ namespace Arena_Server.Infrastructure
             #endregion
             #endregion
             #region PUNCH
-            #region PUNCH UP
-            if (robot.RobotPosition.Y - 1 >= 1)
-            {
-                hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y - 1);
-                if (hitRobot != null)
-                    //if (hitRobot.HealthPoints >= 1)
-                    RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Up));
-            }
+            //#region PUNCH UP
+            //if (robot.RobotPosition.Y - 1 >= 1)
+            //{
+            //    hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y - 1);
+            //    if (hitRobot != null)
+            //        //if (hitRobot.HealthPoints >= 1)
+            //        RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Up));
+            //}
 
-            #endregion
-            #region PUNCH RIGHT
-            if (robot.RobotPosition.X + 1 < +currentMap.MapWidth - 1)
-            {
-                hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + 1 && hr.RobotPosition.Y == robot.RobotPosition.Y);
-                if (hitRobot != null)
+            //#endregion
+            //#region PUNCH RIGHT
+            //if (robot.RobotPosition.X + 1 < +currentMap.MapWidth - 1)
+            //{
+            //    hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + 1 && hr.RobotPosition.Y == robot.RobotPosition.Y);
+            //    if (hitRobot != null)
 
-                    //if (hitRobot.HealthPoints >= 1)
-                    RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Right));
-            }
-            #endregion
-            #region PUNCH DOWN
-            if (robot.RobotPosition.Y + 1 < currentMap.MapHeight - 1)
-            {
-                hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y + 1);
-                if (hitRobot != null)
+            //        //if (hitRobot.HealthPoints >= 1)
+            //        RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Right));
+            //}
+            //#endregion
+            //#region PUNCH DOWN
+            //if (robot.RobotPosition.Y + 1 < currentMap.MapHeight - 1)
+            //{
+            //    hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y + 1);
+            //    if (hitRobot != null)
 
-                    //if (hitRobot.HealthPoints >= 1)
-                    RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Down));
-            }
-            #endregion
-            #region PUNCH LEFT
-            if (robot.RobotPosition.X - 1 >= 1)
-            {
-                hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X - 1 && hr.RobotPosition.Y == robot.RobotPosition.Y);
-                if (hitRobot != null)
+            //        //if (hitRobot.HealthPoints >= 1)
+            //        RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Down));
+            //}
+            //#endregion
+            //#region PUNCH LEFT
+            //if (robot.RobotPosition.X - 1 >= 1)
+            //{
+            //    hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X - 1 && hr.RobotPosition.Y == robot.RobotPosition.Y);
+            //    if (hitRobot != null)
 
-                    //if (hitRobot.HealthPoints >= 1)
-                    RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Left));
-            }
-            #endregion
+            //        //if (hitRobot.HealthPoints >= 1)
+            //        RobotAction.Add(new PossibleAction(MoveType.Punch, Directions.Left));
+            //}
+            //#endregion
             #endregion
             #region SHOOT
             #region SHOOT UP
-            for (int i = 1; i <= 4; i++)
-            {
-                if (robot.RobotPosition.Y - i >= 0)
-                    if (currentMap.GlobalMap[robot.RobotPosition.Y - i, robot.RobotPosition.X] is Wall)
-                    {
-                        RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Up));
-                        break;
-                    }
-                    else
-                    {
-                        hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y - i);
-                        if (hitRobot != null)
-                        {
-                            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Up));
-                            break;
-                        }
-                    }
-                else
-                    break;
+            //for (int i = 1; i <= 4; i++)
+            //{
+            //    if (robot.RobotPosition.Y - i >= 0)
+            //        if (currentMap.GlobalMap[robot.RobotPosition.Y - i, robot.RobotPosition.X] is Wall)
+            //        {
+            //            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Up));
+            //            break;
+            //        }
+            //        else
+            //        {
+            //            hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y - i);
+            //            if (hitRobot != null)
+            //            {
+            //                RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Up));
+            //                break;
+            //            }
+            //        }
+            //    else
+            //        break;
 
 
-            }
+            //}
+            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Up));
             #endregion
             #region SHOOT RIGHT
-            for (int i = 1; i <= 4; i++)
-            {
-                if (robot.RobotPosition.X + i >= currentMap.MapWidth)
-                    if (currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X + i] is Wall)
-                    {
-                        RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Right));
-                        break;
-                    }
-                    else
-                    {
-                        hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + i && hr.RobotPosition.Y == robot.RobotPosition.Y);
-                        if (hitRobot != null)
-                        {
-                            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Right));
-                            break;
-                        }
-                    }
-                else
-                    break;
-            }
+            //for (int i = 1; i <= 4; i++)
+            //{
+            //    if (robot.RobotPosition.X + i >= currentMap.MapWidth)
+            //        if (currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X + i] is Wall)
+            //        {
+            //            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Right));
+            //            break;
+            //        }
+            //        else
+            //        {
+            //            hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + i && hr.RobotPosition.Y == robot.RobotPosition.Y);
+            //            if (hitRobot != null)
+            //            {
+            //                RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Right));
+            //                break;
+            //            }
+            //        }
+            //    else
+            //        break;
+            //}
+            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Right));
             #endregion
             #region SHOOT DOWN
-            for (int i = 1; i <= 4; i++)
-            {
-                if (robot.RobotPosition.Y + i >= 0)
-                    if (currentMap.GlobalMap[robot.RobotPosition.Y + i, robot.RobotPosition.X] is Wall)
-                    {
-                        RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Down));
-                        break;
-                    }
-                    else
-                    {
-                        hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + i && hr.RobotPosition.Y == robot.RobotPosition.Y);
-                        if (hitRobot != null)
-                        {
-                            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Down));
-                            break;
-                        }
-                    }
-                else
-                    break;
-            }
+            //for (int i = 1; i <= 4; i++)
+            //{
+            //    if (robot.RobotPosition.Y + i >= 0)
+            //        if (currentMap.GlobalMap[robot.RobotPosition.Y + i, robot.RobotPosition.X] is Wall)
+            //        {
+            //            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Down));
+            //            break;
+            //        }
+            //        else
+            //        {
+            //            hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + i && hr.RobotPosition.Y == robot.RobotPosition.Y);
+            //            if (hitRobot != null)
+            //            {
+            //                RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Down));
+            //                break;
+            //            }
+            //        }
+            //    else
+            //        break;
+            //}
+            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Down));
             #endregion
             #region SHOOT LEFT
-            for (int i = 1; i <= 4; i++)
-            {
-                if (robot.RobotPosition.X - i >= 0)
-                    if (currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X - i] is Wall)
-                    {
-                        RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Left));
-                        break;
-                    }
-                    else
-                    {
-                        hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X - i && hr.RobotPosition.Y == robot.RobotPosition.Y);
-                        if (hitRobot != null)
-                        {
-                            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Left));
-                            break;
-                        }
-                    }
-                else
-                    break;
-            }
+            //for (int i = 1; i <= 4; i++)
+            //{
+            //    if (robot.RobotPosition.X - i >= 0)
+            //        if (currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X - i] is Wall)
+            //        {
+            //            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Left));
+            //            break;
+            //        }
+            //        else
+            //        {
+            //            hitRobot = LoggedRobots.Find(hr => hr.RobotPosition.X == robot.RobotPosition.X - i && hr.RobotPosition.Y == robot.RobotPosition.Y);
+            //            if (hitRobot != null)
+            //            {
+            //                RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Left));
+            //                break;
+            //            }
+            //        }
+            //    else
+            //        break;
+            //}
+            RobotAction.Add(new PossibleAction(MoveType.Shoot, Directions.Left));
             #endregion
             #endregion
             #region PICK BIG ITEM
