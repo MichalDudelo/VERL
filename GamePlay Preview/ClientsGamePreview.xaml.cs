@@ -20,6 +20,7 @@ using Common_Library.Parts_of_map;
 using Common_Library.Infrastructure;
 using System.Reflection;
 using Logger;
+using GamePlay_Preview.SARSA;
 
 namespace GamePlay_Preview
 {
@@ -59,7 +60,10 @@ namespace GamePlay_Preview
         /// Class properties with all valid information about the state of the game and user
         /// </summary>
         #region Properties
-        
+
+
+        NeuroSarsaCaller NS = new NeuroSarsaCaller();
+
         public Map CurrentMap
         {
             get { return _currentMap; }
@@ -166,7 +170,7 @@ namespace GamePlay_Preview
             this.MouseDown += delegate { DragMove(); };
             var localPath = System.Reflection.Assembly.GetEntryAssembly().Location;
             var pos = localPath.LastIndexOf(@"\") + 1;
-            logFilePath = localPath.Substring(0,  pos) + "Client_" + login + "_Log.txt";
+            logFilePath = localPath.Substring(0, pos) + "Client_" + login + "_Log.txt";
 
 
             EventLog.WriteMessageToLog(logFilePath, "User " + login + " trying to connect to server on " + ipAddress);
@@ -202,8 +206,8 @@ namespace GamePlay_Preview
                     var c = r.Next(0, _possibleMoveList.Count);
                     try
                     {
-
-                        var move = _possibleMoveList.Find(m => m.Action == MoveType.Shoot || m.Action == MoveType.Punch);
+                        //var move = NS.ExploreMap(new RobotAvatar(_myBigItem, _mySmallItems, _myPosition, _currentMap), _possibleMoveList, (int)_history.Last().MyCurrentPay, (int)_myScore, _currentRoundNumber);
+                        var move = NS.FindMove(new RobotAvatar(_myBigItem, _mySmallItems, _myPosition, _currentMap), _possibleMoveList, (int)_history.Last().MyCurrentPay, (int)_myScore, _currentRoundNumber);
                         if (move != null)
                         {
                             InvokeAction(move, _currentRoundNumber);
@@ -252,6 +256,8 @@ namespace GamePlay_Preview
         void cl_GameStartEvent(object oSender, GamePlayArgs oEventArgs)
         {
             _allRoundsNumber = oEventArgs.initalRoundNumber;
+            _currentMap = oEventArgs.map;
+            _initialMap = oEventArgs.map;
             _myScore = 0;
             _currentRoundNumber = 0;
             _myPosition = _startingPosition;
@@ -259,6 +265,8 @@ namespace GamePlay_Preview
             _myTeam = oEventArgs.team;
             _isGameRunning = true;
             EventLog.WriteMessageToLog(logFilePath, "Game is starting!");
+            Dispatcher.Invoke(() => repaintMap(_startingPosition));
+
             PlayGame();
         }
 
@@ -328,12 +336,12 @@ namespace GamePlay_Preview
             _history.Last().MyTotalPay = oEventArgs.response.TotalPay;
             _myScore += oEventArgs.response.MyCurrentPay;
 
-            EventLog.WriteMessageToLog(logFilePath, "Game Message recived with: current round: " + _currentRoundNumber.ToString()+ "; local position: " + _myLocalPosition.ToString() +
+            EventLog.WriteMessageToLog(logFilePath, "Game Message recived with: current round: " + _currentRoundNumber.ToString() + "; local position: " + _myLocalPosition.ToString() +
                 "; has big item: " + _myBigItem.ToString() + "; small item number " + _mySmallItems.ToString() + "; Consequence of move: " + oEventArgs.response.Consequence.ToString() +
                 "; my current pay: " + oEventArgs.response.MyCurrentPay.ToString() + "; total pay: " + oEventArgs.response.TotalPay.ToString());
 
 
-            Dispatcher.Invoke(() => roundTextBox.Text = (oEventArgs.response.RoundNumber+1).ToString());
+            Dispatcher.Invoke(() => roundTextBox.Text = (oEventArgs.response.RoundNumber + 1).ToString());
             Dispatcher.Invoke(() => scoreTextBox.Text = _myScore.ToString());
             Dispatcher.Invoke(() => MessageTextBox.Text = oEventArgs.response.Message);
             lock (m_SyncObject)
@@ -350,8 +358,7 @@ namespace GamePlay_Preview
         void ClientsLibrary_InitialMessageReciveEvent(object oSender, InitialMessageRecivedArgs Args)
         {
             Position _myLocalPosition = null;
-            _currentMap = Args.Map;
-            _initialMap = Args.Map;
+
             _startingPosition = Args.response.MyPosition;
             _myLocalPosition = Args.response.MyPosition;
             _myColor = Args.response.Color;
@@ -363,7 +370,7 @@ namespace GamePlay_Preview
             Dispatcher.Invoke(() => roundTextBox.Text = Args.response.RoundNumber.ToString());
             Dispatcher.Invoke(() => scoreTextBox.Text = "0");
             Dispatcher.Invoke(() => MessageTextBox.Text = Args.response.Message);
-            Dispatcher.Invoke(() => repaintMap(_myLocalPosition));
+
         }
         #endregion
 
@@ -379,7 +386,7 @@ namespace GamePlay_Preview
                 return;
             squareGrid.Children.Clear();
 
-            if (_history != null && _history.Count > 0)
+            if (_history != null && _history.Count > 0 && _history.Last().MadeMove != MoveType.NULL)
                 movesVisualizationHistory = _history.Last();
 
 
@@ -449,9 +456,9 @@ namespace GamePlay_Preview
                                             case MoveType.PickSmallItem:
                                                 imagePath = "pack://application:,,,/" + assembly + ";component/Resources/guard64_" + color + "_take.png";
                                                 break;
-                                            case MoveType.Punch:
-                                                imagePath = "pack://application:,,,/" + assembly + ";component/Resources/guard64_" + color + "_standing.png";
-                                                break;
+                                            //case MoveType.Punch:
+                                            //    imagePath = "pack://application:,,,/" + assembly + ";component/Resources/guard64_" + color + "_standing.png";
+                                            //    break;
                                         }
                                     }
                                     else
