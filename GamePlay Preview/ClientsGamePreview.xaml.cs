@@ -20,7 +20,7 @@ using Common_Library.Parts_of_map;
 using Common_Library.Infrastructure;
 using System.Reflection;
 using Logger;
-using GamePlay_Preview.SARSA;
+
 
 namespace GamePlay_Preview
 {
@@ -62,7 +62,6 @@ namespace GamePlay_Preview
         #region Properties
 
 
-        NeuroSarsaCaller NS = new NeuroSarsaCaller();
 
         public Map CurrentMap
         {
@@ -206,18 +205,11 @@ namespace GamePlay_Preview
                     var c = r.Next(0, _possibleMoveList.Count);
                     try
                     {
-                        //var move = NS.ExploreMap(new RobotAvatar(_myBigItem, _mySmallItems, _myPosition, _currentMap), _possibleMoveList, (int)_history.Last().MyCurrentPay, (int)_myScore, _currentRoundNumber);
-                        var move = NS.FindMove(new RobotAvatar(_myBigItem, _mySmallItems, _myPosition, _currentMap), _possibleMoveList, (int)_history.Last().MyCurrentPay, (int)_myScore, _currentRoundNumber);
-                        if (move != null)
-                        {
-                            InvokeAction(move, _currentRoundNumber);
-                            EventLog.WriteMessageToLog(logFilePath, "User invokes action: " + move.Action.ToString() + " with direction : " + move.MoveDirection.ToString());
-                        }
-                        else
-                        {
+                        
+                       
                             InvokeAction(_possibleMoveList[c], _currentRoundNumber);
                             EventLog.WriteMessageToLog(logFilePath, "User invokes action: " + _possibleMoveList[c].Action.ToString() + " with direction : " + _possibleMoveList[c].MoveDirection.ToString());
-                        }
+                        
                     }
                     catch (InvalidOperationException e)
                     {
