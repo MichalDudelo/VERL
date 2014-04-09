@@ -178,11 +178,11 @@ namespace Common_Library
             EndpointAddress endpointGameplay = new EndpointAddress("net.tcp://localhost:8733/GamePlayService/");
 
             binding.Security.Mode = SecurityMode.None;
-      
-            binding.OpenTimeout = new TimeSpan(0, 3, 0);
-            binding.CloseTimeout = new TimeSpan(0, 2, 0);
-            binding.SendTimeout = new TimeSpan(0, 2, 0);
-            binding.ReceiveTimeout = new TimeSpan(0, 2, 0);
+
+            binding.OpenTimeout = new TimeSpan(0, 0, 2);
+            binding.CloseTimeout = new TimeSpan(0, 0, 1);
+            binding.SendTimeout = new TimeSpan(0, 0, 1);
+            binding.ReceiveTimeout = new TimeSpan(0, 5, 0);
             // binding.Security.Message.ClientCredentialType = MessageCredentialType.None;
             var builder = new ContainerBuilder();
 
