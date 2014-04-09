@@ -645,9 +645,10 @@ namespace Arena_Server.Infrastructure
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y - i);
                             if (hitRobot != null)
                             {
-                                _isRobotShooted = true;
+                               
                                 if (hitRobot.HealthPoints >= 1)
                                 {
+                                    _isRobotShooted = true;
                                     if (_hostileMode)
                                         hitRobot.HealthPoints = hitRobot.HealthPoints - 1;
                                     response = GamePlayServerResponse.OK();
@@ -671,12 +672,6 @@ namespace Arena_Server.Infrastructure
                                     //response = GamePlayServerResponse.InvalidMoveMessage("Hit robot is already damaged");
                                     break;
                                 }
-                            }
-                            else if (_currentMap.GlobalMap[robot.RobotPosition.Y - i, robot.RobotPosition.X] is Wall)
-                            {
-                                response = GamePlayServerResponse.OK();
-                                break;
-
                             }
                             else
                                 response = GamePlayServerResponse.OK();
@@ -698,9 +693,10 @@ namespace Arena_Server.Infrastructure
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + i && hr.RobotPosition.Y == robot.RobotPosition.Y);
                             if (hitRobot != null)
                             {
-                                _isRobotShooted = true;
+                               
                                 if (hitRobot.HealthPoints >= 1)
                                 {
+                                    _isRobotShooted = true;
                                     if (_hostileMode)
                                         hitRobot.HealthPoints = hitRobot.HealthPoints - 1;
                                     response = GamePlayServerResponse.OK();
@@ -725,12 +721,7 @@ namespace Arena_Server.Infrastructure
                                     break;
                                 }
                             }
-                            else if (_currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X + i] is Wall)
-                            {
-                                response = GamePlayServerResponse.OK();
-                                break;
-
-                            }
+                           
                             else
                                 response = GamePlayServerResponse.OK();
                         }
@@ -751,9 +742,10 @@ namespace Arena_Server.Infrastructure
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y + i);
                             if (hitRobot != null)
                             {
-                                _isRobotShooted = true;
+                               
                                 if (hitRobot.HealthPoints >= 1)
                                 {
+                                    _isRobotShooted = true;
                                     if (_hostileMode)
                                         hitRobot.HealthPoints = hitRobot.HealthPoints - 1;
                                     response = GamePlayServerResponse.OK();
@@ -778,12 +770,7 @@ namespace Arena_Server.Infrastructure
                                     break;
                                 }
                             }
-                            else if (_currentMap.GlobalMap[robot.RobotPosition.Y + i, robot.RobotPosition.X] is Wall)
-                            {
-                                response = GamePlayServerResponse.OK();
-                                break;
-
-                            }
+                           
                             else
                                 response = GamePlayServerResponse.OK();
                         }
@@ -805,9 +792,10 @@ namespace Arena_Server.Infrastructure
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X - i && hr.RobotPosition.Y == robot.RobotPosition.Y);
                             if (hitRobot != null)
                             {
-                                _isRobotShooted = true;
+                               
                                 if (hitRobot.HealthPoints >= 1)
                                 {
+                                    _isRobotShooted = true;
                                     if (_hostileMode)
                                         hitRobot.HealthPoints = hitRobot.HealthPoints - 1;
                                     response = GamePlayServerResponse.OK();
@@ -832,12 +820,7 @@ namespace Arena_Server.Infrastructure
                                     break;
                                 }
                             }
-                            else if (_currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X - i] is Wall)
-                            {
-                                response = GamePlayServerResponse.OK();
-                                break;
-
-                            }
+                           
                             else
                                 response = GamePlayServerResponse.OK();
                         }
@@ -861,11 +844,11 @@ namespace Arena_Server.Infrastructure
                 }
                 else if (_isRobotShooted)
                 {
-                    Consequence = MoveConsequence.ShootAndNothingHappen;
+                    Consequence = MoveConsequence.ShotAndHitPlayer;
                     _isRobotShooted = false;
                 }
                 else
-                    Consequence = MoveConsequence.ShotAndHitPlayer;
+                    Consequence = MoveConsequence.ShootAndNothingHappen;
                 return this;
             }
         }
