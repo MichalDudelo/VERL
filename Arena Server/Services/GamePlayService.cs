@@ -657,12 +657,9 @@ namespace Arena_Server.Services
 
                 try
                 {
-#if !DEBUG
+
                     Thread.Sleep((int)_roundTime);
-#else
-                    while (_currentMovesQueue.Count != _numberOfLoggedRobots)
-                        Thread.Sleep(1000);
-#endif
+
                 }
                 catch (ThreadInterruptedException e) // wake up!
                 {
