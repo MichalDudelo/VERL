@@ -75,7 +75,9 @@ namespace Common_Library
                 }
                 else if (!_movesToScore.Exists(m => m.Robot.Equals(currentMove.Robot)))
                 {
-                    _movesToScore.Add(currentMove);
+                    ScoreDictionary.Add(currentMove.Robot, -10.0);
+                    //_movesToScore.Add(currentMove);
+                    currentMove.MyPay = -10.0;
                     MoveListToVisualization.Add(currentMove);
                 }
 
@@ -88,8 +90,9 @@ namespace Common_Library
             #region SCORE MODULE
             if (_scoreModule != null)
             {
-                ScoreDictionary = _scoreModule.GetScore(_currentMap, _movesToScore, globalHistory); // score moves
-
+                var ScoreDictionaryScoreModule = _scoreModule.GetScore(_currentMap, _movesToScore, globalHistory); // score moves
+                foreach (var score in ScoreDictionaryScoreModule)
+                    ScoreDictionary.Add(score.Key, score.Value);
 
                 foreach (var move in _movesToScore.FindAll(m => m.MadeMove == MoveType.DisconnectedPlayer))
                     move.MyPay = ScoreDictionary[move.Robot];
