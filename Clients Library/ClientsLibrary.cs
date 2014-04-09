@@ -67,7 +67,10 @@ namespace Clients_Library
             NetTcpBinding binding = new NetTcpBinding();
             EndpointAddress endpointGameplay = new EndpointAddress("net.tcp://"+ipAddress+":8733/GamePlayService/");
             binding.Security.Mode = SecurityMode.None;
-            binding.ReceiveTimeout = new TimeSpan(0, 10, 0);
+            binding.OpenTimeout = new TimeSpan(0, 0, 3);
+            binding.CloseTimeout = new TimeSpan(0, 0, 1);
+            binding.SendTimeout = new TimeSpan(0, 0, 1);
+            binding.ReceiveTimeout = new TimeSpan(0, 0, 1);
             builder.Register(c => new InstanceContext(new CallbackHandler()));
             builder.Register(c => new DuplexChannelFactory<IGamePlayService>(c.Resolve<InstanceContext>(), binding, endpointGameplay)).AsSelf();
             builder.Register(c => new ClientChannel<IGamePlayService>(c.Resolve<DuplexChannelFactory<IGamePlayService>>().CreateChannel()));
