@@ -323,6 +323,7 @@ namespace Map_Editor
                                 else if (currentMap.GlobalMap[r, c].SmallItemNumber == 1)
                                 {
                                     currentMap.GlobalMap[r, c].SmallItemNumber--;
+                                    currentMap.SmallItemList.Remove(currentMap.SmallItemList.Find(st => st.X == Grid.GetColumn(p) && st.Y == Grid.GetRow(p)));
                                     p.Children.Clear();
                                 }
                             }
