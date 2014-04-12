@@ -436,7 +436,7 @@ namespace Arena_Server.Services
         {
 
             Directions direction = new Directions();
-
+            direction = Directions.NULL;
             var client = OperationContext.Current.GetCallbackChannel<IArenaCallback>();
             var robot = avatarDictionary[client];
             if (round == _currentRound)
@@ -460,6 +460,7 @@ namespace Arena_Server.Services
         {
 
             Directions direction = new Directions();
+            direction = Directions.NULL;
             var client = OperationContext.Current.GetCallbackChannel<IArenaCallback>();
             var robot = avatarDictionary[client];
             if (round == _currentRound)
@@ -483,6 +484,7 @@ namespace Arena_Server.Services
         {
 
             Directions direction = new Directions();
+            direction = Directions.NULL;
             var client = OperationContext.Current.GetCallbackChannel<IArenaCallback>();
             var robot = avatarDictionary[client];
             if (round == _currentRound)
@@ -561,6 +563,7 @@ namespace Arena_Server.Services
         {
 
             Directions direction = new Directions();
+            direction = Directions.NULL;
             var client = OperationContext.Current.GetCallbackChannel<IArenaCallback>();
             var robot = avatarDictionary[client];
             if (round == _currentRound)
