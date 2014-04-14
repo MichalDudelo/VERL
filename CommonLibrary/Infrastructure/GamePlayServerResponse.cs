@@ -58,6 +58,7 @@ namespace Common_Library.Infrastructure
             get { return _consequence; }
             set { _consequence = value; }
         }
+      
 
 
         public GamePlayServerResponse(int roundNumber, Position myPosition, double MyCurrentPay, double TotalPay, bool HasBigItem, int SmallItem,MoveConsequence Consequence, GamePlayServerResponse response)
@@ -134,6 +135,16 @@ namespace Common_Library.Infrastructure
                  ServerState = ServerState.WOUNDED
              };
          }
+
+        public static GamePlayServerResponse Healed()
+        {
+            return new GamePlayServerResponse()
+            {
+                 Result = true,
+                 Message = "Healed",
+                 ServerState = ServerState.HEALED
+            };
+        }
 
 
     }

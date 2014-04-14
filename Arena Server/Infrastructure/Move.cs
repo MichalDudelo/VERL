@@ -94,7 +94,7 @@ namespace Arena_Server.Infrastructure
         public RobotAvatar WoundedRobot
         {
             get { return woundedRobot; }
-            set { if  (this.madeMove == MoveType.Shoot) woundedRobot = value; }
+            set { if (this.madeMove == MoveType.Shoot) woundedRobot = value; }
         }
 
         public Directions DirectionOfMove
@@ -154,7 +154,13 @@ namespace Arena_Server.Infrastructure
 
             if (robot.IsHealed == false)
             {
-                if (robot.HealRounds-- == 1) { robot.IsHealed = true; robot.HealthPoints = 5; };
+                if (robot.HealRounds-- == 1)
+                {
+                    robot.IsHealed = true; robot.HealthPoints = 5;
+                    var healedClient = _avatarDictionary.FirstOrDefault(wc => wc.Value == robot).Key;
+                    this.response = GamePlayServerResponse.Healed();
+                    healedClient.reciveGamePlayData(_currentMap.getSmallerPartForRobot(robot.RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, robot.RobotPosition, robot.HasBigItem, robot.SmallItem, response));
+                };
                 return this.BurnAction();
             }
 
@@ -285,7 +291,13 @@ namespace Arena_Server.Infrastructure
         {
             if (robot.IsHealed == false)
             {
-                if (robot.HealRounds-- == 1) { robot.IsHealed = true; robot.HealthPoints = 5; };
+                if (robot.HealRounds-- == 1)
+                {
+                    robot.IsHealed = true; robot.HealthPoints = 5;
+                    var healedClient = _avatarDictionary.FirstOrDefault(wc => wc.Value == robot).Key;
+                    this.response = GamePlayServerResponse.Healed();
+                    healedClient.reciveGamePlayData(_currentMap.getSmallerPartForRobot(robot.RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, robot.RobotPosition, robot.HasBigItem, robot.SmallItem, response));
+                };
                 return this.BurnAction();
             }
             else
@@ -329,7 +341,13 @@ namespace Arena_Server.Infrastructure
         {
             if (robot.IsHealed == false)
             {
-                if (robot.HealRounds-- == 1) { robot.IsHealed = true; robot.HealthPoints = 5; };
+                if (robot.HealRounds-- == 1)
+                {
+                    robot.IsHealed = true; robot.HealthPoints = 5;
+                    var healedClient = _avatarDictionary.FirstOrDefault(wc => wc.Value == robot).Key;
+                    this.response = GamePlayServerResponse.Healed();
+                    healedClient.reciveGamePlayData(_currentMap.getSmallerPartForRobot(robot.RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, robot.RobotPosition, robot.HasBigItem, robot.SmallItem, response));
+                };
                 return this.BurnAction();
             }
             else
@@ -376,7 +394,13 @@ namespace Arena_Server.Infrastructure
         {
             if (robot.IsHealed == false)
             {
-                if (robot.HealRounds-- == 1) { robot.IsHealed = true; robot.HealthPoints = 5; };
+                if (robot.HealRounds-- == 1)
+                {
+                    robot.IsHealed = true; robot.HealthPoints = 5;
+                    var healedClient = _avatarDictionary.FirstOrDefault(wc => wc.Value == robot).Key;
+                    this.response = GamePlayServerResponse.Healed();
+                    healedClient.reciveGamePlayData(_currentMap.getSmallerPartForRobot(robot.RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, robot.RobotPosition, robot.HasBigItem, robot.SmallItem, response));
+                };
                 return this.BurnAction();
             }
             else
@@ -626,7 +650,13 @@ namespace Arena_Server.Infrastructure
 
             if (robot.IsHealed == false)
             {
-                if (robot.HealRounds-- == 1) { robot.IsHealed = true; robot.HealthPoints = 5; };
+                if (robot.HealRounds-- == 1)
+                {
+                    robot.IsHealed = true; robot.HealthPoints = 5;
+                    var healedClient = _avatarDictionary.FirstOrDefault(wc => wc.Value == robot).Key;
+                    this.response = GamePlayServerResponse.Healed();
+                    healedClient.reciveGamePlayData(_currentMap.getSmallerPartForRobot(robot.RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, robot.RobotPosition, robot.HasBigItem, robot.SmallItem, response));
+                };
                 return this.BurnAction();
             }
             switch (DirectionOfMove)
@@ -645,7 +675,7 @@ namespace Arena_Server.Infrastructure
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y - i);
                             if (hitRobot != null)
                             {
-                               
+
                                 if (hitRobot.HealthPoints >= 1)
                                 {
                                     _isRobotShooted = true;
@@ -693,7 +723,7 @@ namespace Arena_Server.Infrastructure
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X + i && hr.RobotPosition.Y == robot.RobotPosition.Y);
                             if (hitRobot != null)
                             {
-                               
+
                                 if (hitRobot.HealthPoints >= 1)
                                 {
                                     _isRobotShooted = true;
@@ -721,7 +751,7 @@ namespace Arena_Server.Infrastructure
                                     break;
                                 }
                             }
-                           
+
                             else
                                 response = GamePlayServerResponse.OK();
                         }
@@ -742,7 +772,7 @@ namespace Arena_Server.Infrastructure
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X && hr.RobotPosition.Y == robot.RobotPosition.Y + i);
                             if (hitRobot != null)
                             {
-                               
+
                                 if (hitRobot.HealthPoints >= 1)
                                 {
                                     _isRobotShooted = true;
@@ -770,7 +800,7 @@ namespace Arena_Server.Infrastructure
                                     break;
                                 }
                             }
-                           
+
                             else
                                 response = GamePlayServerResponse.OK();
                         }
@@ -792,7 +822,7 @@ namespace Arena_Server.Infrastructure
                             hitRobot = _avatarDictionary.Values.ToList().Find(hr => hr.RobotPosition.X == robot.RobotPosition.X - i && hr.RobotPosition.Y == robot.RobotPosition.Y);
                             if (hitRobot != null)
                             {
-                               
+
                                 if (hitRobot.HealthPoints >= 1)
                                 {
                                     _isRobotShooted = true;
@@ -820,7 +850,7 @@ namespace Arena_Server.Infrastructure
                                     break;
                                 }
                             }
-                           
+
                             else
                                 response = GamePlayServerResponse.OK();
                         }
@@ -857,7 +887,13 @@ namespace Arena_Server.Infrastructure
 
             if (robot.IsHealed == false)
             {
-                if (robot.HealRounds-- == 1) { robot.IsHealed = true; robot.HealthPoints = 5; };
+                if (robot.HealRounds-- == 1)
+                {
+                    robot.IsHealed = true; robot.HealthPoints = 5;
+                    var healedClient = _avatarDictionary.FirstOrDefault(wc => wc.Value == robot).Key;
+                    this.response = GamePlayServerResponse.Healed();
+                    healedClient.reciveGamePlayData(_currentMap.getSmallerPartForRobot(robot.RobotPosition).SerializeMap(), new GamePlayServerResponse(_currentRound, robot.RobotPosition, robot.HasBigItem, robot.SmallItem, response));
+                };
                 return this.BurnAction();
             }
             else

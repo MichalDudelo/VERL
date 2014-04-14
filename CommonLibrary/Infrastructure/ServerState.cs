@@ -27,7 +27,9 @@ namespace Common_Library.Infrastructure
         [EnumMember]
         WOUNDED = 7,
         [EnumMember]
-        MOVE_TIMOUT
+        MOVE_TIMOUT = 8,
+        [EnumMember]
+        HEALED = 9
 
     }
 }

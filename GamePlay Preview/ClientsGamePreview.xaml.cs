@@ -327,7 +327,10 @@ namespace GamePlay_Preview
             _history.Last().MyCurrentPay = oEventArgs.response.MyCurrentPay;
             _history.Last().MyTotalPay = oEventArgs.response.TotalPay;
             _myScore += oEventArgs.response.MyCurrentPay;
-
+            if (oEventArgs.response.ServerState == ServerState.WOUNDED)
+                this.HealthPoints--;
+            if (oEventArgs.response.ServerState == ServerState.HEALED)
+                this.HealthPoints = 5; 
             EventLog.WriteMessageToLog(logFilePath, "Game Message recived with: current round: " + _currentRoundNumber.ToString() + "; local position: " + _myLocalPosition.ToString() +
                 "; has big item: " + _myBigItem.ToString() + "; small item number " + _mySmallItems.ToString() + "; Consequence of move: " + oEventArgs.response.Consequence.ToString() +
                 "; my current pay: " + oEventArgs.response.MyCurrentPay.ToString() + "; total pay: " + oEventArgs.response.TotalPay.ToString());
