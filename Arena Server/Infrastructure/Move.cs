@@ -345,7 +345,7 @@ namespace Arena_Server.Infrastructure
                         _currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X].SmallItemNumber == 0)
                     {
                         robot.HasBigItem = false;
-                        _currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X].HasBigItem = false;
+                        _currentMap.GlobalMap[robot.RobotPosition.Y, robot.RobotPosition.X].HasBigItem = true;
                         _hasRobotBigItem = false;
                         response = GamePlayServerResponse.OK();
 
