@@ -125,6 +125,7 @@ namespace Arena_Server.Infrastructure
             this._directionOfMove = directionOfMove;
             this.client = client;
             this._currentRound = curentRound;
+            this._consequence = MoveConsequence.NULL;
         }
 
         public Move(MoveType moveType, RobotAvatar robot)
@@ -132,6 +133,7 @@ namespace Arena_Server.Infrastructure
             this.robot = robot;
             this.madeMove = moveType;
             this.client = null;
+            this._consequence = MoveConsequence.NULL;
         }
 
 
@@ -145,6 +147,7 @@ namespace Arena_Server.Infrastructure
             this.client = client;
             this._currentRound = curentRound;
             _hostileMode = hostileMode;
+            this._consequence = MoveConsequence.NULL;
         }
 
 
