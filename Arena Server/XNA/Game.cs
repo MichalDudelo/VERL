@@ -574,6 +574,7 @@ namespace TileEngine
                     Vector2 moveVector = Vector2.Zero;
                     Vector2 moveDir = Vector2.Zero;
                     string animation = "";
+                    string animationWalk = "";
 
                     Move move = kvp.Value;
                     SpriteAnimation currentRobot = kvp.Key;
@@ -590,19 +591,23 @@ namespace TileEngine
                                 case Directions.Up:
 
                                     moveDir = new Vector2(0, moveMinus);
-                                    animation = "WalkNorth";
+                                    animationWalk = "WalkNorth";
+                                    if (currentRobot == currentWoundedRobot)
+                                    {
+                                        currentRobot.CurrentAnimation = "HitNorth";
+                                    }
                                     moveVector += new Vector2(0, moveMinus);
 
                                     if (moveDir.Length() != 0)
                                     {
                                         currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
 
-                                        if (currentRobot.CurrentAnimation != animation)
-                                            currentRobot.CurrentAnimation = animation;
+                                        if (currentRobot.CurrentAnimation != animationWalk)
+                                            currentRobot.CurrentAnimation = animationWalk;
 
                                     }
 
-
+                                        
                                     if (turnCounter == 0)
                                     {
                                         currentRobot.CurrentAnimation = "Idle" + currentRobot.CurrentAnimation.Substring(4);
@@ -613,15 +618,19 @@ namespace TileEngine
                                 case Directions.Left:
 
                                     moveDir = new Vector2(moveMinus, 0);
-                                    animation = "WalkWest";
+                                    animationWalk = "WalkWest";
+                                    if (currentRobot == currentWoundedRobot)
+                                    {
+                                        currentRobot.CurrentAnimation = "HitWest";
+                                    }
                                     moveVector += new Vector2(moveMinus, 0);
 
                                     if (moveDir.Length() != 0)
                                     {
                                         currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
 
-                                        if (currentRobot.CurrentAnimation != animation)
-                                            currentRobot.CurrentAnimation = animation;
+                                        if (currentRobot.CurrentAnimation != animationWalk)
+                                            currentRobot.CurrentAnimation = animationWalk;
 
                                     }
 
@@ -637,15 +646,19 @@ namespace TileEngine
                                 case Directions.Right:
 
                                     moveDir = new Vector2(movePlus, 0);
-                                    animation = "WalkEast";
+                                    animationWalk = "WalkEast";
+                                    if (currentRobot == currentWoundedRobot)
+                                    {
+                                        currentRobot.CurrentAnimation = "HitEast";
+                                    }
                                     moveVector += new Vector2(movePlus, 0);
 
                                     if (moveDir.Length() != 0)
                                     {
                                         currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
 
-                                        if (currentRobot.CurrentAnimation != animation)
-                                            currentRobot.CurrentAnimation = animation;
+                                        if (currentRobot.CurrentAnimation != animationWalk)
+                                            currentRobot.CurrentAnimation = animationWalk;
 
                                     }
 
@@ -660,15 +673,19 @@ namespace TileEngine
                                 case Directions.Down:
 
                                     moveDir = new Vector2(0, movePlus);
-                                    animation = "WalkSouth";
+                                    animationWalk = "WalkSouth";
+                                    if (currentRobot == currentWoundedRobot)
+                                    {
+                                        currentRobot.CurrentAnimation = "HitSouth";
+                                    }
                                     moveVector += new Vector2(0, movePlus);
 
                                     if (moveDir.Length() != 0)
                                     {
                                         currentRobot.MoveBy((int)moveDir.X, (int)moveDir.Y);
 
-                                        if (currentRobot.CurrentAnimation != animation)
-                                            currentRobot.CurrentAnimation = animation;
+                                        if (currentRobot.CurrentAnimation != animationWalk)
+                                            currentRobot.CurrentAnimation = animationWalk;
 
 
                                     }
@@ -920,6 +937,8 @@ namespace TileEngine
 
                             if (move.WoundedRobot != null)
                                 currentWoundedRobot = robotList.Find(wounded => (wounded.RobotName.Equals(move.WoundedRobot.Login)));
+                            else
+                                currentWoundedRobot = null;
 
                             switch (move.DirectionOfMove)
                             {
@@ -1020,10 +1039,11 @@ namespace TileEngine
                         #endregion
                         #region PickSmallItemCase
                         case MoveType.PickSmallItem:
-
+                            currentRobot.CurrentAnimation = "IdleRest";
                             if (turnCounter == roundTimeMax)
                             {
                                 SpriteAnimation smallItm;
+                                currentRobot.CurrentAnimation = "IdleRest";
                                 smallItm = smallItemsList.Find(small => small.Position.X == (currentRobot.Position.X) && small.Position.Y == (currentRobot.Position.Y));
                                 if (smallItm != null)
                                     smallItemsList.Remove(smallItm);
@@ -1039,9 +1059,11 @@ namespace TileEngine
                         #endregion
                         #region PickBigItemCase
                         case MoveType.PickBigItem:
+                            currentRobot.CurrentAnimation = "IdleRest";
                             if (turnCounter == roundTimeMax)
                             {
                                 SpriteAnimation bigItm;
+                                currentRobot.CurrentAnimation = "IdleRest";
                                 bigItm = bigItemsList.Find(big => big.Position.X == (currentRobot.Position.X) && big.Position.Y == (currentRobot.Position.Y));
                                 if (bigItm != null)
                                     bigItemsList.Remove(bigItm);
@@ -1057,9 +1079,10 @@ namespace TileEngine
                         #endregion
                         #region DropBigItemCase
                         case MoveType.DropBigItem:
-
+                            currentRobot.CurrentAnimation = "IdleRest";
                             if (turnCounter == roundTimeMax)
                             {
+                                currentRobot.CurrentAnimation = "IdleRest";
                                 Texture2D BigItemTex = Texture2D.FromStream(graphics.GraphicsDevice, new FileStream("XNA/Textures/Items/big_item.png", FileMode.Open, FileAccess.Read));
                                 SpriteAnimation bigItem;
                                 bigItem = new SpriteAnimation(BigItemTex, null);

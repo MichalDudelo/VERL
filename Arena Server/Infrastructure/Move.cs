@@ -650,7 +650,7 @@ namespace Arena_Server.Infrastructure
         public Move ShootAction()
         {
             RobotAvatar hitRobot;
-
+            WoundedRobot = null;
             if (robot.IsHealed == false)
             {
                 if (robot.HealRounds-- == 1)
