@@ -454,7 +454,7 @@ namespace Arena_Server.Services
                 }
                 else
                 {
-                    robot.ErrorNumber = 10;
+                    robot.ErrorNumber = 0;
                     EventLog.WriteMessageToLog(strLogPath, "Client: " + robot.Login + " Picked Big item " + " in round " + round.ToString());
                 }
 
