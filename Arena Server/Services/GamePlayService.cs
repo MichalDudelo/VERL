@@ -46,6 +46,7 @@ namespace Arena_Server.Services
         private ScoreCounter _scoreCounter = new ScoreCounter();
         private int _numberOfPlayedGames = 0;
         private string strLogPath ;
+        private string strErrorLogPath;
         private string strScoreLogPath;
         private List<RobotAvatar> _disconnectedRobotAvatarList = new List<RobotAvatar>();
         private bool _endGameInformationSend = false;
@@ -73,6 +74,7 @@ namespace Arena_Server.Services
             var localPath = System.Reflection.Assembly.GetEntryAssembly().Location;
             var pos = localPath.LastIndexOf(@"\")+1;
             strLogPath = localPath.Substring(0, pos) + "GamePlayLog.txt";
+            strErrorLogPath = localPath.Substring(0, pos) + "ErrorGamePlayLog.txt";
 
         }
 
@@ -125,7 +127,7 @@ namespace Arena_Server.Services
                         }
                         catch (Exception e)
                         {
-                            EventLog.WriteErrorToLog(strLogPath, e);
+                            EventLog.WriteErrorToLog(strErrorLogPath, e);
                         }
                     CreateHistoryLogFile(_numberOfPlayedGames);
                     _globalHistory.Clear(); // clear all history for that game
@@ -139,7 +141,7 @@ namespace Arena_Server.Services
                         }
                         catch (Exception e)
                         {
-                            EventLog.WriteErrorToLog(strLogPath, e);
+                            EventLog.WriteErrorToLog(strErrorLogPath, e);
                         }
                     }
             }
@@ -339,7 +341,7 @@ namespace Arena_Server.Services
                     }
                     catch (Exception e)
                     {
-                        EventLog.WriteErrorToLog(strLogPath, e);
+                        EventLog.WriteErrorToLog(strErrorLogPath, e);
                     }
                     _currentMovesQueue.Add(new Move(MoveType.Disconnect, _currentMap, client, avatarDictionary, avatarDictionary[client], Directions.Down, _currentRound));
                 }
@@ -350,7 +352,7 @@ namespace Arena_Server.Services
                 }
                 catch (Exception e)
                 {
-                    EventLog.WriteErrorToLog(strLogPath, e);
+                    EventLog.WriteErrorToLog(strErrorLogPath, e);
                 }
                 colorList.Add(avatarDictionary[client].Color);
                 PlayerDisconnectEvent(this, new PlayerLoginArgs(avatarDictionary[client]));
@@ -384,7 +386,7 @@ namespace Arena_Server.Services
             }
             catch (Exception e)
             {
-                EventLog.WriteErrorToLog(strLogPath, e);
+                EventLog.WriteErrorToLog(strErrorLogPath, e);
             }
             return new Map(0, 0);
             
@@ -677,7 +679,7 @@ namespace Arena_Server.Services
                 }
                 catch (Exception e)
                 {
-                    EventLog.WriteErrorToLog(strLogPath, e);
+                    EventLog.WriteErrorToLog(strErrorLogPath, e);
                 }
 
                 EventLog.WriteMessageToLog(strLogPath, "ROUND nr: " + _currentRound + " SEND gameRoundStart message");
@@ -733,13 +735,13 @@ namespace Arena_Server.Services
                             }
                             catch (Exception e)
                             {
-                                EventLog.WriteErrorToLog(strLogPath, e);
+                                EventLog.WriteErrorToLog(strErrorLogPath, e);
                             }
                         }
                     }
                     catch (Exception e)
                     {
-                        EventLog.WriteErrorToLog(strLogPath, e);
+                        EventLog.WriteErrorToLog(strErrorLogPath, e);
                     }
                 _currentRound++;
 
