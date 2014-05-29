@@ -62,7 +62,7 @@ namespace Common_Library.Parts_of_map
         public Segment()
         {
             isStartingPosition = false;
-            
+            Robot = null;
             hasBigItem = false;
             smallItemNumber = 0;
             color = "Transparent";
