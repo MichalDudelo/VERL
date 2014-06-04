@@ -90,7 +90,14 @@ namespace Common_Library
             #region SCORE MODULE
             if (_scoreModule != null)
             {
-                var ScoreDictionaryScoreModule = _scoreModule.GetScore(_currentMap, _movesToScore, globalHistory); // score moves
+                try
+                {
+                    var ScoreDictionaryScoreModule = _scoreModule.GetScore(_currentMap, _movesToScore, globalHistory); // score moves
+                }
+                catch (Exception e)
+                {
+                    
+                }
                 foreach (var score in ScoreDictionaryScoreModule)
                     ScoreDictionary.Add(score.Key, score.Value);
 
