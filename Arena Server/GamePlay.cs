@@ -90,9 +90,10 @@ namespace Common_Library
             #region SCORE MODULE
             if (_scoreModule != null)
             {
+                Dictionary<RobotAvatar, double> ScoreDictionaryScoreModule = new Dictionary<RobotAvatar, double>();
                 try
                 {
-                    var ScoreDictionaryScoreModule = _scoreModule.GetScore(_currentMap, _movesToScore, globalHistory); // score moves
+                     ScoreDictionaryScoreModule = _scoreModule.GetScore(_currentMap, _movesToScore, globalHistory); // score moves
                 }
                 catch (Exception e)
                 {
